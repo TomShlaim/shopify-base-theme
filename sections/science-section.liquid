@@ -1,0 +1,298 @@
+{% if section.settings.show_section %}
+<div class="science-section" style="background-color: {{ section.settings.background_color }}">
+  <div class="page-width">
+    <div class="science-section__grid">
+      <div class="science-section__content">
+        <h2 class="science-section__title" style="color: {{ section.settings.title_color }}">
+          {{ section.settings.title }}
+        </h2>
+        <div class="science-section__text" style="color: {{ section.settings.text_color }}">
+          {{ section.settings.text }}
+        </div>
+        
+        <div class="science-section__features">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'feature' %}
+                <div class="science-feature" {{ block.shopify_attributes }}>
+                  <div class="science-feature__icon">
+                    {% if block.settings.icon %}
+                      {{ block.settings.icon | image_url: width: 60 | image_tag:
+                        loading: 'lazy',
+                        width: 60,
+                        height: 60
+                      }}
+                    {% endif %}
+                  </div>
+                  <div class="science-feature__content">
+                    <h3 class="science-feature__title" style="color: {{ section.settings.title_color }}">
+                      {{ block.settings.title }}
+                    </h3>
+                    <div class="science-feature__text" style="color: {{ section.settings.text_color }}">
+                      {{ block.settings.text }}
+                    </div>
+                  </div>
+                </div>
+            {% endcase %}
+          {% endfor %}
+        </div>
+
+        {% if section.settings.show_button %}
+          <a href="{{ section.settings.button_link }}" class="science-section__button button">
+            {{ section.settings.button_text }}
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="science-section__image">
+        {% if section.settings.image %}
+          {{ section.settings.image | image_url: width: 800 | image_tag:
+            loading: 'lazy',
+            class: 'science-section__img',
+            widths: '400, 600, 800',
+            sizes: '(min-width: 990px) 50vw, 100vw',
+            height: section.settings.image.height,
+            width: section.settings.image.width
+          }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% style %}
+.science-section {
+  padding: 80px 0;
+}
+
+.science-section__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.science-section__title {
+  font-size: 36px;
+  line-height: 1.2;
+  margin: 0 0 30px;
+}
+
+.science-section__text {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.science-section__features {
+  display: grid;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.science-feature {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.science-feature__icon {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: {{ section.settings.icon_background }};
+  border-radius: 50%;
+}
+
+.science-feature__icon img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.science-feature__title {
+  font-size: 20px;
+  margin: 0 0 10px;
+}
+
+.science-feature__text {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.science-section__button {
+  margin-top: 20px;
+  display: inline-block;
+}
+
+.science-section__image {
+  position: relative;
+}
+
+.science-section__img {
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 989px) {
+  .science-section {
+    padding: 60px 0;
+  }
+
+  .science-section__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .science-section__title {
+    font-size: 32px;
+  }
+
+  .science-section__text {
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .science-section {
+    padding: 40px 0;
+  }
+
+  .science-section__title {
+    font-size: 28px;
+  }
+
+  .science-feature {
+    grid-template-columns: 40px 1fr;
+    gap: 15px;
+  }
+
+  .science-feature__icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .science-feature__icon img {
+    width: 20px;
+    height: 20px;
+  }
+}
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Science Section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "Show section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Science-Backed Pet Nutrition"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Our pet vitamins are developed by veterinarians and nutritionists, using only the highest quality ingredients backed by scientific research. We ensure every product meets rigorous standards for safety and efficacy.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f8f9fa"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "icon_background",
+      "label": "Icon background color",
+      "default": "#e8f5e9"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button",
+      "label": "Show button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Research-Based"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Our formulations are based on the latest veterinary research and nutritional science.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Science Section",
+      "blocks": [
+        {
+          "type": "feature"
+        },
+        {
+          "type": "feature"
+        },
+        {
+          "type": "feature"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %} 
