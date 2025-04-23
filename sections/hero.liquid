@@ -1,7 +1,73 @@
-<section class="hero" style="background-image: url('{{ 'hero-background.jpg' | asset_url }}'); background-size: cover; background-position: center;">
-  <div class="hero-content">
-    <h1>The Future of Dog Supplements is Here</h1>
-    <p>Premium gummy supplements that taste like treats, designed to support your dog's health</p>
-    <a href="#shop" class="button">SHOP NOW</a>
+<section class="hero" style="background-color: {{ section.settings.background_color }};">
+  <div class="container hero-container">
+    <div class="hero-content">
+      <h1>{{ section.settings.heading | replace: 'Dog Supplements', '<span>Dog Supplements</span>' }}</h1>
+      <p>{{ section.settings.subheading }}</p>
+      {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+        <a href="{{ section.settings.button_link }}" class="button">
+          {{ section.settings.button_label }}
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 17.5C14.1421 17.5 17.5 14.1421 17.5 10C17.5 5.85786 14.1421 2.5 10 2.5C5.85786 2.5 2.5 5.85786 2.5 10C2.5 14.1421 5.85786 17.5 10 17.5Z" stroke="white" stroke-miterlimit="10"/>
+            <path d="M10 6.25V13.75" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6.25 10H13.75" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      {% endif %}
+    </div>
+    
+    <div class="hero-image">
+      {% if section.settings.image != blank %}
+        <img src="{{ section.settings.image | img_url: 'master' }}" alt="{{ section.settings.heading }}">
+      {% endif %}
+    </div>
   </div>
-</section> 
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Future of Dog Supplements is Here"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Premium gummy supplements that taste like treats, designed to support your dog's health"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link",
+      "default": "#shop"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hero Image"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#00a8e8"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero",
+      "category": "Custom Content"
+    }
+  ]
+}
+{% endschema %} 

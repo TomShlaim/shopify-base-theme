@@ -1,30 +1,161 @@
-<section class="product-showcase">
-  <h2>Shop Gummies for Dogs</h2>
-  <div class="product">
-    <h3>Hip & Joint Care</h3>
-    <p>Improves your dog's mobility and comfort with a specially-designed formula to support their hips and joints.</p>
-    <ul>
-      <li>Improves Joint Health</li>
-      <li>Enhances Flexibility</li>
-    </ul>
-    <a href="/products/hip-joint-care" class="button">Shop Now</a>
+<section id="shop" class="product-showcase">
+  <div class="container">
+    <div class="product-showcase-header">
+      <h2>{{ section.settings.heading }}</h2>
+    </div>
+    
+    <div class="product-showcase-description">
+      <p>{{ section.settings.description }}</p>
+    </div>
+    
+    <div class="products-grid">
+      {% for block in section.blocks %}
+        <div class="product-card {% if block.settings.highlight %}highlight{% endif %}" {{ block.shopify_attributes }}>
+          <a href="{{ block.settings.product_link }}" class="product-card-image">
+            {% if block.settings.product_image != blank %}
+              <img src="{{ block.settings.product_image | img_url: 'master' }}" alt="{{ block.settings.title }}">
+            {% endif %}
+            
+            {% if block.settings.hover_image != blank %}
+              <img src="{{ block.settings.hover_image | img_url: 'master' }}" alt="{{ block.settings.title }} Hover">
+            {% endif %}
+          </a>
+          
+          {% if block.settings.highlight %}
+            <div class="product-tag">Best Seller</div>
+          {% endif %}
+          
+          <div class="product-card-content">
+            <h3>
+              <a href="{{ block.settings.product_link }}">{{ block.settings.title }}</a>
+            </h3>
+            
+            <div class="product-card-description">
+              {{ block.settings.description }}
+            </div>
+            
+            <ul class="product-card-features">
+              {% if block.settings.feature_1 != blank %}
+                <li>{{ block.settings.feature_1 }}</li>
+              {% endif %}
+              
+              {% if block.settings.feature_2 != blank %}
+                <li>{{ block.settings.feature_2 }}</li>
+              {% endif %}
+            </ul>
+            
+            <a href="{{ block.settings.product_link }}" class="button">Shop Now</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
   </div>
-  <div class="product">
-    <h3>Dental & Oral Care</h3>
-    <p>Help your dog maintain quality oral care year round, using a special formula that promotes canine dental care, including strong teeth, healthy gums, and fresh breath.</p>
-    <ul>
-      <li>Teeth Cleaning</li>
-      <li>Gum Support</li>
-    </ul>
-    <a href="/products/dental-oral-care" class="button">Shop Now</a>
-  </div>
-  <div class="product">
-    <h3>Pre & Probiotic Care</h3>
-    <p>A probiotic digestive formula that improves your dog's gut health and digestion for happy tummies and an all-around better quality of life.</p>
-    <ul>
-      <li>Gut Health</li>
-      <li>Improved Digestion</li>
-    </ul>
-    <a href="/products/probiotic-care" class="button">Shop Now</a>
-  </div>
-</section> 
+</section>
+
+{% schema %}
+{
+  "name": "Product Showcase",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop Gummies for Dogs"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Healthy, happy pups start here. Discover all-natural, human-grade gummy supplements. Veterinarian-approved formulas. No harmful ingredients, whatsoever."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Product Title",
+          "default": "Product Title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Product Description",
+          "default": "Product description goes here."
+        },
+        {
+          "type": "text",
+          "id": "feature_1",
+          "label": "Feature 1",
+          "default": "Feature 1"
+        },
+        {
+          "type": "text",
+          "id": "feature_2",
+          "label": "Feature 2",
+          "default": "Feature 2"
+        },
+        {
+          "type": "url",
+          "id": "product_link",
+          "label": "Product URL"
+        },
+        {
+          "type": "image_picker",
+          "id": "product_image",
+          "label": "Product Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "hover_image",
+          "label": "Hover Image"
+        },
+        {
+          "type": "checkbox",
+          "id": "highlight",
+          "label": "Highlight as Best Seller",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Showcase",
+      "blocks": [
+        {
+          "type": "product",
+          "settings": {
+            "title": "Hip & Joint Care",
+            "description": "Improves your dog's mobility and comfort with a specially-designed formula to support their hips and joints.",
+            "feature_1": "Improves Joint Health",
+            "feature_2": "Enhances Flexibility"
+          }
+        },
+        {
+          "type": "product",
+          "settings": {
+            "title": "Dental & Oral Care",
+            "description": "Help your dog maintain quality oral care year round, using a special formula that promotes canine dental care, including strong teeth, healthy gums, and fresh breath.",
+            "feature_1": "Teeth Cleaning",
+            "feature_2": "Gum Support",
+            "highlight": true
+          }
+        },
+        {
+          "type": "product",
+          "settings": {
+            "title": "Pre & Probiotic Care",
+            "description": "A probiotic digestive formula that improves your dog's gut health and digestion for happy tummies and an all-around better quality of life",
+            "feature_1": "Gut Health",
+            "feature_2": "Improved Digestion"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %} 

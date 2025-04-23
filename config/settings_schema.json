@@ -1,12 +1,102 @@
 [
   {
-    "name": "theme_info",
+    "name": "Theme Info",
+    "theme_name": "GumPaws Inspired",
+    "theme_author": "Custom Theme",
+    "theme_version": "1.0.0",
+    "theme_documentation_url": "",
+    "theme_support_url": ""
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Main Colors"
+      },
+      {
+        "type": "color",
+        "id": "primary_color",
+        "label": "Primary Color",
+        "default": "#ff6b35"
+      },
+      {
+        "type": "color",
+        "id": "secondary_color",
+        "label": "Secondary Color",
+        "default": "#00a8e8"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text Color",
+        "default": "#333333"
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background Color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "label": "Accent Color",
+        "default": "#ff4081"
+      },
+      {
+        "type": "color",
+        "id": "announcement_bg",
+        "label": "Announcement Bar Background",
+        "default": "#ffb8e6"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Font Settings"
+      },
+      {
+        "type": "font_picker",
+        "id": "heading_font",
+        "label": "Headings",
+        "default": "helvetica_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "body_font",
+        "label": "Body Text",
+        "default": "helvetica_n4"
+      }
+    ]
+  },
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo"
+      },
+      {
+        "type": "text",
+        "id": "announcement_text",
+        "label": "Announcement Text",
+        "default": "30-Day Money Back Guarantee"
+      }
+    ]
+  },
+  {
+    "name": "Footer",
     "settings": [
       {
         "type": "text",
-        "id": "theme_name",
-        "label": "Theme Name",
-        "default": "Simple Theme"
+        "id": "copyright_text",
+        "label": "Copyright Text",
+        "default": "© 2024 Your Store Name. All rights reserved."
       }
     ]
   }

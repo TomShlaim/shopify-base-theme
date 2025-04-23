@@ -1,17 +1,67 @@
-<header>
-  <div class="logo">
-    <a href="/">
-      <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }} Logo">
+<header class="header">
+  <div class="container header-container">
+    <a href="/" class="logo">
+      {% if section.settings.logo != blank %}
+        <img src="{{ section.settings.logo | img_url: 'master' }}" alt="{{ shop.name }}">
+      {% else %}
+        <span class="logo-text">{{ shop.name }}</span>
+      {% endif %}
     </a>
+    
+    <div class="nav-wrapper">
+      <nav class="primary-nav" role="navigation">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/pages/shop">Shop</a></li>
+          <li><a href="/pages/the-science">The Science</a></li>
+          <li><a href="/pages/about">About us</a></li>
+        </ul>
+      </nav>
+      
+      <nav class="secondary-nav">
+        <ul>
+          <li>
+            <a href="/customer_authentication/redirect?locale=en&region_country=US">
+              <span>Login</span>
+            </a>
+          </li>
+          <li>
+            <a href="/cart" class="cart-link">
+              <span>Cart</span>
+              <span class="cart-count">{{ cart.item_count }}</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
-  <nav>
-    <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/pages/shop">Shop</a></li>
-      <li><a href="/pages/the-science">The Science</a></li>
-      <li><a href="/pages/about">About Us</a></li>
-      <li><a href="/customer_authentication/redirect?locale=en&region_country=US">Login</a></li>
-      <li><a href="/cart">Cart</a></li>
-    </ul>
-  </nav>
-</header> 
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 250,
+      "step": 10,
+      "unit": "px",
+      "label": "Logo width",
+      "default": 140
+    }
+  ]
+}
+{% endschema %} 

@@ -1,0 +1,21 @@
+{% if section.settings.announcement_text != blank %}
+  <div class="announcement-bar">
+    <div class="container">
+      <p>{{ section.settings.announcement_text }}</p>
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement Text",
+      "default": "30-Day Money Back Guarantee"
+    }
+  ]
+}
+{% endschema %} 
