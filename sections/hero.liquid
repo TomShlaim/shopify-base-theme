@@ -1,4 +1,4 @@
-<section class="hero" style="background-color: {{ section.settings.background_color }};">
+<section class="hero" {% if section.settings.image != blank %}style="background-image: url('{{ section.settings.image | img_url: 'master' }}'); background-size: cover; background-position: center;"{% endif %}>
   <div class="container hero-container">
     <div class="hero-content">
       <h1>{{ section.settings.heading | replace: 'Dog Supplements', '<span>Dog Supplements</span>' }}</h1>
@@ -15,13 +15,38 @@
       {% endif %}
     </div>
     
-    <div class="hero-image">
-      {% if section.settings.image != blank %}
-        <img src="{{ section.settings.image | img_url: 'master' }}" alt="{{ section.settings.heading }}">
-      {% endif %}
-    </div>
+    {% if section.settings.show_image and section.settings.dog_image != blank %}
+      <div class="hero-image">
+        <img src="{{ section.settings.dog_image | img_url: 'master' }}" alt="{{ section.settings.heading }}">
+      </div>
+    {% endif %}
   </div>
 </section>
+
+<style>
+  .hero {
+    background-color: {{ section.settings.background_color }};
+    position: relative;
+    padding: 6rem 0;
+    color: #fff;
+  }
+  
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+  }
+  
+  .hero-container {
+    position: relative;
+    z-index: 2;
+  }
+</style>
 
 {% schema %}
 {
@@ -54,7 +79,18 @@
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Hero Image"
+      "label": "Background Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "Show Dog Image",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "dog_image",
+      "label": "Dog Image"
     },
     {
       "type": "color",

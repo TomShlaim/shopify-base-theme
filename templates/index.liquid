@@ -1,11 +1,17 @@
 {% section 'hero' %}
-{% section 'features' %}
-{% section 'product-showcase' %}
+<div id="features-section">
+  {% section 'features' %}
+</div>
+<div id="shop">
+  {% section 'product-showcase' %}
+</div>
 
-<div class="section-seperator"></div>
+<div class="section-separator"></div>
 
-{% section 'testimonials' %}
+<div id="testimonials-section">
+  {% section 'testimonials' %}
+</div>
 
-<div class="section-seperator"></div>
+<div class="section-separator"></div>
 
 {{ content_for_index }} 
