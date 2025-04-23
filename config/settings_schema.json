@@ -1,11 +1,10 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Gumpaws",
-    "theme_author": "Gumpaws",
-    "theme_version": "10.5.1",
-    "theme_documentation_url": "https://gumpaws.com/",
-    "theme_support_url": "https://gumpaws.com/"
+    "theme_author": "{{YOUR_BRAND_NAME_HERE}}",
+    "theme_version": "1.0.0",
+    "theme_documentation_url": "{{YOUR_THEME_DOCUMENTATION_URL_HERE}}",
+    "theme_support_url": "{{YOUR_THEME_SUPPORT_URL_HERE}}"
   },
   {
     "name": "t:theme_settings.appearance.name",
@@ -452,7 +451,7 @@
     ]
   },
   {
-    "name": "t:theme_settings.product_card.name",
+    "name": "Product Card",
     "settings": [
       {
         "type": "header",
