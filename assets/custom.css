@@ -9,17 +9,6 @@
   }
 }
 
-.url---pages-gumpawsquiz  .shopify-section--announcement-bar  {
-display: none!important;
-}
-
-.url---pages-gumpawsquizv2  .shopify-section--announcement-bar, .url---pages-gumpawsquizv3  .shopify-section--announcement-bar{
-display: none!important;
-}
-
-.url---pages-gumpawsquizv3 footer {
-  display: none!important;
-}
  .icon-discount {
     margin-left: 9px !important;
 }
@@ -39,25 +28,11 @@ display: none!important;
     top: -40px!important;
 }
 
-
-
 .gallery-item {
          border-right: 5px solid #fff !important;
     border-left: 5px solid #fff !important;
 }
 
-.url---pages-gumpawsquiz #shopify-chat {
-  display: none!important;
-}
-
-.url---pages-gumpawsquizv2 #shopify-chat {
-  display: none!important;
-}
-
-
-.url---pages-gumpawsquizv3 #shopify-chat {
-  display: none!important;
-}
 
 [data-tf-widget="LjDYNk2c"] {
 top: 40px !important;
