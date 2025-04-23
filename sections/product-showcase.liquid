@@ -14,10 +14,12 @@
           <a href="{{ block.settings.product_link }}" class="product-card-image">
             {% if block.settings.product_image != blank %}
               <img src="{{ block.settings.product_image | img_url: 'master' }}" alt="{{ block.settings.title }}">
+            {% else %}
+              <img src="{{ 'placeholder-image.jpg' | asset_url }}" alt="Product placeholder">
             {% endif %}
             
             {% if block.settings.hover_image != blank %}
-              <img src="{{ block.settings.hover_image | img_url: 'master' }}" alt="{{ block.settings.title }} Hover">
+              <img class="hover-image" src="{{ block.settings.hover_image | img_url: 'master' }}" alt="{{ block.settings.title }} Hover">
             {% endif %}
           </a>
           
@@ -44,7 +46,7 @@
               {% endif %}
             </ul>
             
-            <a href="{{ block.settings.product_link }}" class="button">Shop Now</a>
+            <a href="{{ block.settings.product_link }}" class="button product-button">Shop Now</a>
           </div>
         </div>
       {% endfor %}

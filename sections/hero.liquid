@@ -1,25 +1,21 @@
-<section class="hero" {% if section.settings.image != blank %}style="background-image: url('{{ section.settings.image | img_url: 'master' }}'); background-size: cover; background-position: center;"{% endif %}>
-  <div class="container hero-container">
+{% assign section_padding = section.settings.section_padding %}
+
+<section class="hero {% if section_padding %}hero-padding-{{ section_padding }}{% endif %}" style="background-image: url('{{ section.settings.background_image | image_url: width: 1800 }}'); background-size: cover; background-position: center;">
+  <div class="hero-overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }}"></div>
+  <div class="container">
     <div class="hero-content">
-      <h1>{{ section.settings.heading | replace: 'Dog Supplements', '<span>Dog Supplements</span>' }}</h1>
-      <p>{{ section.settings.subheading }}</p>
-      {% if section.settings.button_label != blank and section.settings.button_link != blank %}
-        <a href="{{ section.settings.button_link }}" class="button">
-          {{ section.settings.button_label }}
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 17.5C14.1421 17.5 17.5 14.1421 17.5 10C17.5 5.85786 14.1421 2.5 10 2.5C5.85786 2.5 2.5 5.85786 2.5 10C2.5 14.1421 5.85786 17.5 10 17.5Z" stroke="white" stroke-miterlimit="10"/>
-            <path d="M10 6.25V13.75" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M6.25 10H13.75" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
+      {% if section.settings.heading != blank %}
+        <h1 style="color: {{ section.settings.heading_color }}">{{ section.settings.heading }}</h1>
+      {% endif %}
+      
+      {% if section.settings.subheading != blank %}
+        <p class="hero-subheading" style="color: {{ section.settings.text_color }}">{{ section.settings.subheading }}</p>
+      {% endif %}
+      
+      {% if section.settings.button_text != blank %}
+        <a href="{{ section.settings.button_link }}" class="button hero-button" style="background-color: {{ section.settings.button_color }}; color: {{ section.settings.button_text_color }};">{{ section.settings.button_text }}</a>
       {% endif %}
     </div>
-    
-    {% if section.settings.show_image and section.settings.dog_image != blank %}
-      <div class="hero-image">
-        <img src="{{ section.settings.dog_image | img_url: 'master' }}" alt="{{ section.settings.heading }}">
-      </div>
-    {% endif %}
   </div>
 </section>
 
@@ -50,8 +46,23 @@
 
 {% schema %}
 {
-  "name": "Hero",
+  "name": "Hero Section",
   "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image",
+      "info": "Recommended size: 1800 x 800 pixels"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "label": "Overlay Opacity",
+      "default": 30
+    },
     {
       "type": "text",
       "id": "heading",
@@ -59,15 +70,27 @@
       "default": "The Future of Dog Supplements is Here"
     },
     {
-      "type": "text",
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "textarea",
       "id": "subheading",
       "label": "Subheading",
       "default": "Premium gummy supplements that taste like treats, designed to support your dog's health"
     },
     {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
       "type": "text",
-      "id": "button_label",
-      "label": "Button Label",
+      "id": "button_text",
+      "label": "Button Text",
       "default": "SHOP NOW"
     },
     {
@@ -77,32 +100,42 @@
       "default": "#shop"
     },
     {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Background Image"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_image",
-      "label": "Show Dog Image",
-      "default": true
-    },
-    {
-      "type": "image_picker",
-      "id": "dog_image",
-      "label": "Dog Image"
+      "type": "color",
+      "id": "button_color",
+      "label": "Button Color",
+      "default": "#ff6b35"
     },
     {
       "type": "color",
-      "id": "background_color",
-      "label": "Background Color",
-      "default": "#00a8e8"
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section Padding",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
     }
   ],
   "presets": [
     {
       "name": "Hero",
-      "category": "Custom Content"
+      "category": "Hero"
     }
   ]
 }
