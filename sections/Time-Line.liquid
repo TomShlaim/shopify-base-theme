@@ -1,0 +1,230 @@
+{% schema %}
+{
+  "name": "Custom Timeline Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Health First. Everything Second."
+    },
+    {
+      "type": "textarea",
+      "id": "paragraph_1",
+      "label": "First Paragraph",
+      "default": "Stare into your dog’s eyes — like us, you know there is a world of compassion, emotion, and thought beyond the barking."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "timeline_item",
+      "name": "Timeline Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Sub Title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Timeline Section",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}
+
+
+<style>
+
+
+
+.custom-timeline-section {
+
+  background-color: #fff;
+  position: relative;
+}
+
+.timeline-center-line {
+  width: 2px;
+  background-color: #000;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.timeline-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+
+
+   .timeline-row.row-right .timeline-line {
+ width: 50%;
+    width: 3rem;
+    margin-left: 3rem;
+     margin-right: -1rem;
+      border: 1px dashed #000;
+}
+
+
+ .timeline-row.row-left .timeline-line {
+ width: 50%;
+    width: 3rem;
+    margin-right: 3rem;
+   margin-left: -1rem;
+      border: 1px dashed #000;
+}
+
+.timeline-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.content-empty {
+  visibility: hidden;
+}
+
+.content-wrap {
+  text-align: center;
+}
+
+
+@media (max-width: 1200px) {
+  .content-empty {
+      display: none !important;
+}
+
+  .custom-timeline-section {
+  
+  }
+.timeline-center-line {
+    width: 2px;
+    background-color: #000;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+        left: auto!important;
+    right: 0px!important;
+}
+  .timeline-container  {
+    width: auto!important;
+  }
+.timeline-line {
+margin-left: auto !important;
+       
+      margin-right: 1px !important;
+ 
+}
+.timeline-row.row-right {
+        flex-flow: row-reverse;
+  }
+  
+.timeline-content {
+margin-left: auto;
+margin-right: 0px;
+    max-width: calc(100% - 3rem);
+  width: 500px;
+}
+
+}
+
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+  .content-wrap img {
+    width: 3rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1rem;
+  }
+
+#shopify-section-template--24039321010488__time_line_eRJBTR .sub-title {
+    font-size: 0.9rem;
+}
+
+  #shopify-section-template--24039321010488__time_line_eRJBTR .icon-title {
+color: #f54a00!important;
+  }
+
+</style>
+
+<section class="custom-timeline-section padding-top-75 page-container padding-bottom-75 page-container">
+
+  <h2  class="title-section padding-bottom-25" style=" text-align: center;">
+{{ section.settings.heading }}
+  </h2>
+ <p  class="sub-title padding-bottom-50" style="
+    text-align: center;
+">
+    {{ section.settings.paragraph_1 }}
+  </p>
+
+  <div class="timeline-container " style="width: 1200px; max-width: 100%; position: relative; margin: 0 auto;">
+    <!-- Center Line -->
+    <div class="timeline-center-line"></div>
+
+    {% for block in section.blocks %}
+      {% assign is_left = forloop.index | modulo: 2 %}
+      <div class="timeline-row {% if is_left == 1 %}row-left{% else %}row-right{% endif %}">
+        <!-- Left Content -->
+        <div class="timeline-content {% if is_left == 1 %}content-left{% else %}content-empty{% endif %}">
+          {% if is_left == 1 %}
+            <div class="content-wrap">
+              {% if block.settings.icon %}
+                <img src="{{ block.settings.icon | img_url: 'master'  }}" alt="{{ block.settings.title }}">
+              {% endif %}
+            <p class=" sub-title uppercase">{{ block.settings.title }}</p>
+ <p class="icon-title">{{ block.settings.subtitle }}</p>
+              <p class="">{{ block.settings.description }}</p>
+            </div>
+          {% endif %}
+        </div>
+        
+        <!-- Line -->
+        <div class="timeline-line"></div>
+        
+        <!-- Right Content -->
+        <div class="timeline-content {% if is_left == 0 %}content-right{% else %}content-empty{% endif %}">
+          {% if is_left == 0 %}
+            <div class="content-wrap">
+              {% if block.settings.icon %}
+                <img src="{{ block.settings.icon |img_url: 'master'  }}" alt="{{ block.settings.title }}">
+              {% endif %}
+        <p class=" sub-title uppercase">{{ block.settings.title }}</p>
+ <p class="icon-title">{{ block.settings.subtitle }}</p>
+              <p class="">{{ block.settings.description }}</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+

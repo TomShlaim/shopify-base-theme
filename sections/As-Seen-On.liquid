@@ -1,0 +1,117 @@
+{% schema %}
+{
+  "name": "As Seen On",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "As Seen On:"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Upload Logo"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "As Seen On",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}
+
+<section class="ContainerGrid  ">
+  <div class="as-seen-on">
+  <div class="container display-flex-pc">
+    <p class="as-seen-on-title">{{ section.settings.title }}</p>
+    <div class="as-seen-on-logos">
+      {% for block in section.blocks %}
+        {% if block.settings.logo != blank %}
+          <img src="{{ block.settings.logo | img_url: '200x' }}" alt="Logo">
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+      </div>
+</section>
+
+<style>
+  .as-seen-on {
+    padding: 1rem 0;
+    border-top: 1px solid #EEEEEE;
+    border-bottom: 1px solid #EEEEEE;
+    text-align: center;
+  }
+
+
+  .display-flex-pc  {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+  
+  .as-seen-on-title {
+    text-transform: uppercase;
+    font-size: 1rem;
+    font-weight: 600;
+    color: ##20120B;
+  }
+
+  .as-seen-on-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .as-seen-on-logos img {
+    max-height: 5.5rem;
+    object-fit: contain;
+    width: auto;
+  }
+
+
+@media (max-width: 768px) {
+  .display-flex-pc {
+        margin-right: 0px !important;
+        padding-right: 0px !important;
+    display: block!important;
+  }
+
+  .as-seen-on {
+    padding-bottom: 20px!important;
+    padding-top: 20px!important;
+
+  }
+
+
+
+.as-seen-on-title {
+    margin-bottom: 15px!important;
+}
+.as-seen-on-logos img {
+    width: calc(33% - 10px) !important;
+    max-height: 72px!important;
+}
+
+.as-seen-on-logos {
+    display: flex;
+    justify-content: center;
+    flex-flow: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+}
+</style>

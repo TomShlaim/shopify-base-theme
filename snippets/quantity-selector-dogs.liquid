@@ -1,0 +1,360 @@
+{%- liquid
+  assign base_price = product.price 
+  assign discount_1 = 0
+  assign discount_2 = 10
+  assign discount_3 = 16.67
+  assign discount_4 = 20
+  assign discount_5 = 25
+  assign discount_6 = 30
+-%}
+<label class="breez-size">Breed Size:</label>
+<div class="quantity-tabs">
+  <button class="tab-button active" data-multiplier="1">
+    <img src="https://cdn.shopify.com/s/files/1/0916/1349/5608/files/small.png?v=1734450665" alt="Small">
+    <span>0-45lbs</span>
+  </button>
+  <button class="tab-button" data-multiplier="2">
+    <img src="https://cdn.shopify.com/s/files/1/0916/1349/5608/files/medium.png?v=1734450665" alt="Medium">
+    <span>45-90lbs</span>
+  </button>
+  <button class="tab-button" data-multiplier="3">
+    <img src="https://cdn.shopify.com/s/files/1/0916/1349/5608/files/big.png?v=1734450665" alt="Big">
+    <span>90lbs +</span>
+  </button>
+</div>
+
+<div class="quantity-options ">
+  <div class="quantity-box selected" data-quantity="1" data-discount="{{ discount_1 }}">
+    <div class="box-content">
+      <div class="circle"></div>
+      <div class="offer-title">
+        <div class="div-title">
+          <div class="title"><span class="dynamic-quantity">1</span> Tube</div>
+          {% if discount_1 > 0 %}<span class="labelsave">save {{ discount_1 }}%</span>{% endif %}
+        </div>
+        <p class="description">1-month supply <small>1 per day</small></p>
+      </div>
+      <div class="price">
+        <span class="new-price"><span class="dynamic-price">{{ base_price | times: 1 | money_without_trailing_zeros }}</span></span>
+        <span class="old-price"    {% if discount_1 == 0 %} style="display: none;" {% endif %}><span>{{ base_price | money_without_trailing_zeros }}</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="quantity-box " data-quantity="2" data-discount="{{ discount_2 }}">
+    <div class="box-content">
+      <div class="circle"></div>
+      <span class="label most-popular">MOST POPULAR</span>
+      <div class="offer-title">
+        <div class="div-title">
+          <div class="title"><span class="dynamic-quantity">2</span> Tubes</div>
+          {% if discount_2 > 0 %}<span class="labelsave">save {{ discount_2 }}%</span>{% endif %}
+        </div>
+        <p class="description">2-month supply <small>1 per day</small></p>
+      </div>
+      <div class="price">
+        <span class="new-price"><span class="dynamic-price">{{ base_price | times: 2 | times: 0.9 | money_without_trailing_zeros }}</span></span>
+        <span class="old-price"><span>{{ base_price | times: 2 | money_without_trailing_zeros }}</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="quantity-box" data-quantity="3" data-discount="{{ discount_3 }}">
+    <div class="box-content">
+      <div class="circle"></div>
+      <span class="label blue">BEST VALUE</span>
+      <div class="offer-title">
+        <div class="div-title">
+          <div class="title"><span class="dynamic-quantity">3</span> Tubes</div>
+          {% if discount_3 > 0 %}<span class="labelsave">save {{ discount_3 }}%</span>{% endif %}
+        </div>
+        <p class="description">3-month supply <small>1 per day</small></p>
+      </div>
+      <div class="price">
+        <span class="new-price"><span class="dynamic-price">{{ base_price | times: 3 | times: 0.833 | money_without_trailing_zeros }}</span></span>
+        <span class="old-price"><span>{{ base_price | times: 3 | money_without_trailing_zeros }}</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const tabs = document.querySelectorAll('.tab-button');
+  const boxes = document.querySelectorAll('.quantity-box');
+  const hiddenQuantityInput = document.getElementById('cart-quantity');
+
+  let multiplier = 1;
+
+  function updateHiddenQuantity() {
+    const selectedBox = document.querySelector('.quantity-box.selected');
+    if (selectedBox) {
+      const baseQuantity = parseInt(selectedBox.getAttribute('data-quantity'), 10);
+      hiddenQuantityInput.value = baseQuantity * multiplier;
+    }
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function () {
+      multiplier = parseInt(tab.getAttribute('data-multiplier'), 10);
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const descriptions = ['1 per day', '2 per day', '3 per day'];
+
+      boxes.forEach(box => {
+        const baseQuantity = parseInt(box.getAttribute('data-quantity'), 10);
+        const basePrice = parseFloat('{{ base_price }}');
+
+        const newQuantity = baseQuantity * multiplier;
+        let discount = 0;
+
+        // Calculate discount based on new quantity
+        if (newQuantity === 2) discount = 10;
+        else if (newQuantity === 3) discount = 16.67;
+        else if (newQuantity === 4) discount = 20;
+        else if (newQuantity === 6) discount = 25;
+        else if (newQuantity >= 9) discount = 30;
+
+        const discountedPrice = (basePrice * newQuantity * (1 - discount / 100)).toFixed(2);
+        const originalPrice = (basePrice * newQuantity).toFixed(2);
+
+        // Update dynamic quantity, price, and old price
+        box.querySelector('.dynamic-quantity').textContent = newQuantity;
+        box.querySelector('.dynamic-price').textContent = '$' + (discountedPrice / 100).toFixed(2);
+        box.querySelector('.old-price').textContent = '$' + (originalPrice / 100).toFixed(2);
+
+        // Update discount label if it exists
+        const labelSave = box.querySelector('.labelsave');
+        if (labelSave) {
+          labelSave.textContent = `save ${discount}%`;
+        }
+
+        // Update description
+        const description = box.querySelector('.description small');
+        if (description) {
+          description.textContent = descriptions[multiplier - 1];
+        }
+      });
+
+      // Update hiddenQuantityInput after updating the UI
+      updateHiddenQuantity();
+    });
+  });
+
+  boxes.forEach(box => {
+    box.addEventListener('click', function () {
+      boxes.forEach(b => b.classList.remove('selected'));
+      box.classList.add('selected');
+      updateHiddenQuantity();
+    });
+  });
+
+  // Update hiddenQuantityInput on page load
+  updateHiddenQuantity();
+});
+</script>
+
+
+
+
+
+<style>
+
+.circle {
+      display: flex;
+    position: absolute;
+     display: flex!important;
+    justify-content: center;
+    align-items: center;
+    left: 1.5rem;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #fab1ff;
+    border-radius: 50%;
+}
+
+.quantity-box.selected .circle {
+  background: #fff;
+  border-color: #fab1ff;
+}
+
+
+
+  .labelsave{
+    font-size: 0.55rem;
+    text-transform: uppercase;
+   border: 1px solid #ffb1ff;
+    color: #ffb1ff;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border-radius: 100px;
+    right: 1rem;
+    padding: 7px 11px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+  }
+  .div-title {
+        display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+.circle::after {
+  content: "";
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 50%;
+  margin: 5px auto;
+}
+
+  .breez-size {
+   font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+.quantity-box.selected .circle::after {
+  background: #fab1ff;
+}
+
+.quantity-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.tab-button span{
+       width: 100%;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.tab-button img{
+    width: 4rem;
+}
+
+.tab-button {
+      padding: 0.5rem;
+    border-radius: 15px;
+    cursor: pointer;
+   border: 1px solid transparent;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+     text-align: center;
+}
+.tab-button.active {
+  background: #fff;
+    border: 1px solid #eee;
+}
+
+.quantity-options {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0;
+    flex-flow: column;
+    width: 30rem;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.shopify-product-form {
+    max-width: 30rem;
+  }
+
+
+.offer-title .title {
+margin-top: 0.1rem;
+    font-weight: 700;
+    line-height: 1.5;
+    font-size: 0.9rem;
+}
+  .offer-title {
+margin-left: 2.2rem;
+        text-align: left;
+  }
+.circle {
+    top: calc(50% - 10px);
+}
+
+
+  .description small {
+         font-style: italic;
+  }
+
+ .box-content .description {
+    font-weight: 400;
+    line-height: 1.3;
+    font-size: 0.8rem;
+}
+  
+.box-content{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.quantity-box {
+    border-radius: 15px;
+    padding: 0.5rem 1.5rem;
+  width: 100%;
+      border: 1px solid #eee;
+  background: #fff;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+}
+.quantity-box.selected {
+border-color: #fab1ff;
+    background: #fab1ff2e;
+}
+.quantity-options .label {
+font-size: 0.55rem;
+    background: #ffb1ff;
+    color: #201209;
+    font-weight: 600;
+    letter-spacing: 1px;
+    position: absolute;
+    top: -0.5rem;
+    border-radius: 100px;
+    right: 1rem;
+    padding: 7px 11px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+}
+.quantity-options .label.most-popular {
+  color: #fff;
+  background: rgb(46 117 94);
+}
+.price {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+.new-price {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgb(31 18 9);
+}
+.old-price {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 0.8rem;
+}
+.add-to-cart-button {
+  background: #0073e6;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  display: block;
+  width: 100%;
+}
+</style>

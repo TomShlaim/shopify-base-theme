@@ -1,0 +1,546 @@
+.quiz-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+
+.progress-bar {
+     width: 100%;
+    height: 15px;
+    background: #FFFFFF;
+    border-radius: 100px;
+    overflow: hidden;
+    position: relative;
+    margin: 0px 0px 20px 0;
+}
+
+
+.quiz-container {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.quiz-container.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+.announcement-bar, .header__secondary-nav, .header__primary-nav  {
+  display: none!important;
+}
+
+.quiz-slide-div {
+         padding: 30px 25px 0px 25px;
+        margin: 0px 20px 25px 20px;
+        background-color: #F8F7F4;
+    display: flex;
+    justify-content: space-between;
+    flex-flow: column;
+        border-radius: 25px 25px 25px 25px;
+}
+
+
+
+.quiz-container .cta_button {
+    width: 100%;
+}
+
+.icon img {
+  width: 25px;
+}
+
+.icon-text {
+    font-family: "DM Sans", Sans-serif;
+    font-weight: 600;
+          font-size: 15px;
+color: #20120B;
+}
+
+
+.title_quize {
+    font-size: 20px;
+    line-height: 1.3em;
+    font-family: "DM Sans", Sans-serif;
+    font-weight: 800;
+    line-height: 1.2em;
+    padding-bottom: 20px;
+    color: #20120A;
+}
+
+.hand-up{
+    width: 100%;
+    height: 250px;
+    object-fit: contain;
+    padding-top: 20px;
+}
+
+.welcome-trusted   img {
+    width: 275px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 25px;
+
+}
+
+.welcome-trusted   {
+   margin-top: 25px;
+    border-top: 1px solid #EEEEEE;
+    padding-top: 35px;
+
+}
+
+
+.quiz-trusted img {
+    width: 225px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 20px;
+
+}
+
+.dog-name-placeholder {
+    color: #e85100;
+}
+
+.quiz-trusted {
+    margin-top: 15px;
+}
+
+.footer  {
+  display: none!important;
+}
+
+.SEEN-ON p{
+    color: #20120B;
+    padding-bottom: 5px;
+    padding-top: 10px;
+    font-size: 14px;
+    font-family: "DM Sans", Sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.quiz-slide-div input[type=text], .quiz-slide-div input[type=email],  .quiz-slide-div .breed-select {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 1rem;
+    color: #20120A;
+    font-family: "DM Sans", Sans-serif;
+    font-weight: 400;
+    border: 1px solid #EEEEEE;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    transition: border-color .3s ease;
+}
+
+.quiz-slide-div input[type=text]::placeholder,
+.quiz-slide-div input[type=email]::placeholder,
+.quiz-slide-div .breed-select::placeholder {
+    color: #AAAAAA;
+    opacity: 1; 
+}
+
+
+.quiz-slide-div {
+    min-height: 560px;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+.breed-select:focus {
+  border-color: #20120A;
+  outline: none;
+}
+
+
+.SEEN-ON .item{
+    width: calc(33.33% - 10px);
+}
+
+.grid-SEEN-ON {
+  display: flex;
+      flex-flow: wrap;
+    justify-content: center;
+  gap: 10px;
+}
+.icon-list .icon-item {
+    display: flex;
+    align-items: center;
+      padding-top: 5px;
+    padding-bottom: 5px;
+    gap: 10px;
+    justify-content: center;
+}
+
+.back-btn {
+      background: transparent !important;
+    font-size: 15px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    fill: #2C211A;
+    font-family: "DM Sans", Sans-serif;
+    padding: 17px 0px 15px 0px;
+    color: #2C211A;
+}
+
+
+.quiz-slide p {
+    color: #20120A;
+    font-family: "DM Sans", Sans-serif;
+    text-align: center;
+    line-height: 1.5;
+    font-size: 16px;
+    padding-bottom: 20px;
+    margin-bottom: 0px;
+}
+
+.icon-list {
+    padding-bottom: 30px;
+}
+
+.welcome-screen,
+.question-screen,
+.calculating-screen {
+  text-align: center;
+}
+
+.progress-bar {
+
+    border-radius: 100px;
+    overflow: hidden;
+    position: relative;
+  
+}
+
+.progress-bar .progress {
+    height: 100%;
+    background: #095D41;
+    width: 0;
+  left: 0px;
+position: absolute;
+    width: 0;
+    top: 0;
+    left: 0;
+    transition: width 0.5s ease-in-out;
+}
+
+.progress-bar span {
+     position: absolute;
+  right: 5px;
+    line-height: 15px;
+padding-right: 5px;
+    font-family: "DM Sans", Sans-serif;
+    color: #fff;
+    font-weight: 600;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+}
+
+.breed-select {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 10px 15px;
+    border: 1px solid #EEEEEE;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    background: white;
+    font-family: "DM Sans", Sans-serif;
+    color: #20120A;
+}
+
+.breed-select:focus {
+    border-color: #20120A;
+}
+
+.breed-select-options {
+    position: absolute;
+    top: 70%;
+    left: 0;
+    right: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #EEEEEE;
+    border-radius: 0 0 10px 10px;
+    z-index: 1000;
+    display: none;
+}
+
+.breed-select-wrapper input {
+  min-width: 100%;
+}
+.breed-option {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-family: "DM Sans", Sans-serif;
+    font-size: 14px;
+    color: #20120A;
+}
+
+.breed-option:hover {
+    background-color: #F8F7F4;
+}
+
+.weight-options {
+    display: flex;
+    gap: 6px;
+}
+
+.dental-options  {
+    display: flex;
+    gap: 6px;
+      flex-flow: wrap;
+}
+
+.health-options,
+.yes-no-options {
+  display: grid;
+  gap: 5px;
+  margin-bottom: 25px;
+}
+
+.weight-options label {
+      position: relative;
+    padding: 0;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.weight-options label span{
+    color: #20120B;
+    margin-bottom: 10px;
+    font-size: 12px;
+    padding-top: 0px;
+    font-family: "DM Sans", Sans-serif;
+    font-weight: 600;
+    display: block;
+}
+
+.weight-options label  img {
+    padding: 15px;
+}
+
+.dental-options label:not(.none-option) {
+      width: calc(50% - 5px)!important;
+}
+
+.dental-options label img{
+    padding: 15px;
+      margin-left: auto;
+    margin-right: auto;
+    width: 65px;
+}
+
+.dental-options span {
+    max-width: 68%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.dental-options .none-option {
+  min-width: 100%;
+}
+
+.dental-options .none-option span {
+    margin-bottom: 8px;
+    margin-top: 8px;
+}
+.dental-options label {
+   position: relative;
+  padding: 0px;
+  background: #fff;
+  border: 1px solid #EEEEEE;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.yes-no-options label {
+  position: relative;
+  padding: 8px;
+  background: #fff;
+  border: 1px solid #EEEEEE;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+
+.yes-no-options label span {
+    color: #20120B;
+    font-family: "DM Sans", Sans-serif;
+    font-weight: 600;
+          line-height: 1.4em;
+    margin-bottom: 0px;
+  display: block;
+    font-size: 12px;
+}
+
+.health-options label span,
+.dental-options label span {
+    color: #20120B;
+    font-family: "DM Sans", Sans-serif;
+    font-weight: 600;
+          line-height: 1.4em;
+    margin-bottom: 15px;
+  display: block;
+    font-size: 12px;
+}
+
+.weight-options label:hover,
+.health-options label:hover,
+.dental-options label:hover,
+.yes-no-options label:hover {
+    background-color: #FFFFFF;
+    border-style: solid;
+    border-color: #095D41;
+}
+
+
+label.selected, label.active {
+    background-color: #FFFFFF;
+    border-style: solid;
+    border-color: #095D41;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+}
+
+input[type="radio"]:checked + span,
+input[type="checkbox"]:checked + span {
+  color: #20120B;
+}
+
+input[type="radio"]:checked + span::before,
+input[type="checkbox"]:checked + span::before {
+  content: '';
+  margin-right: 0px;
+}
+
+.next-btn,
+.back-btn,
+.submit-btn {
+
+}
+
+.next-btn,
+.submit-btn {
+
+}
+
+.next-btn:hover,
+.submit-btn:hover {
+
+}
+
+.back-btn {
+
+}
+
+.back-btn:hover {
+  background: #eee;
+}
+
+.error-message {
+    color: #f44336;
+    margin: 10px 0;
+    font-size: 14px;
+    font-family: "DM Sans", Sans-serif;
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .quiz-container {
+    padding-top: 0px!important;
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
+
+  .weight-options,
+  .health-options,
+  .dental-options,
+  .yes-no-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+
+[dir="rtl"] input[type="radio"]:checked + span::before,
+[dir="rtl"] input[type="checkbox"]:checked + span::before {
+  margin-right: 0;
+  margin-left: 8px;
+}
+
+.breed-select-wrapper {
+    position: relative;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+}
+
+.quiz-slide {
+  animation: slideIn 0s ease forwards;
+}
+
+.active {
+    background-color: #fff !important;
+ 
+} 

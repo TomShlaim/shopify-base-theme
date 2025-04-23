@@ -1,0 +1,169 @@
+{{ 'sticky-Scrolling-ta.css' | asset_url | stylesheet_tag }}
+
+
+
+<section class="sticky-scroll-section ">
+
+  
+<div class=" padding-top-75 padding-bottom-75 ">
+  <div class="sticky-scroll-container">
+    <div class="sticky-left">
+      <div class="sticky-content  scroll-trigger animate--slide-in mb-padding-right-left">
+        {% for block in section.blocks %}
+        <div class="content-item {% if forloop.first %}active{% endif %}" data-index="{{ forloop.index }}">
+          <h2 class="sticky-scroll-title pb-25 ">{{ block.settings.title }} <i>Care</i></h2>
+          <p class="mb-padding-right-left">{{ block.settings.text }}</p>
+              <!-- Shop Button -->
+      <a href="{{ block.settings.url }}" class="cta_button">
+Shop Now
+<svg xmlns="http://www.w3.org/2000/svg" id="uuid-48567840-edd2-42b8-80fa-8e24b7a9a2b3" viewBox="0 0 512 512"><defs><style>.uuid-42b892db-dbe9-4944-94c3-f75b472392c0{fill:#fff;}</style></defs><ellipse class="uuid-42b892db-dbe9-4944-94c3-f75b472392c0" cx="330.31" cy="385.89" rx="66.99" ry="49.98" transform="translate(-161.09 514.48) rotate(-64.1)"/><ellipse class="uuid-42b892db-dbe9-4944-94c3-f75b472392c0" cx="125.36" cy="174.18" rx="67.07" ry="49.92" transform="translate(-59.35 64.92) rotate(-23.65)"/><ellipse class="uuid-42b892db-dbe9-4944-94c3-f75b472392c0" cx="203.3" cy="383.17" rx="67.01" ry="49.97" transform="translate(-227.44 332.04) rotate(-55.28)"/><ellipse class="uuid-42b892db-dbe9-4944-94c3-f75b472392c0" cx="124.57" cy="301.85" rx="67.04" ry="49.95" transform="translate(-162.75 146.68) rotate(-39.2)"/><path class="uuid-42b892db-dbe9-4944-94c3-f75b472392c0" d="M428.54,169.72c-11.1-11.7-25.59-18.39-40.87-20.12-14.25-1.61-24.84-12.4-25.94-26.68-1.21-15.65-7.63-30.66-19.42-42.26-28.3-27.84-76.95-24.02-105.47,7.72-44.38,49.4-36.51,123.84-29.29,168.96,3.4,21.26,19.51,37.42,40.84,40.87,45.41,7.34,115.54,20.98,166.58-20.48,35.25-28.63,42.65-77.37,13.57-108.01ZM284.38,135.18c-19.71,12.4-31.08-20.23-14-30.97,19.71-12.4,31.08,20.23,14,30.97Z"/></svg>
+
+</a>
+        </div>
+        {% endfor %}
+      </div>
+
+<div class="circle-wrapper hide-mobile" style="">
+  <div class="color-circle" style=" background-color: #ffb7ff;">
+ 
+</div>
+
+</div>
+
+
+
+    </div>
+
+
+<div class="circle-wrapper hide-pc" style="">
+  <div class="color-circle" style=" background-color: #ffb7ff;">
+ 
+</div>
+
+</div>
+    <div class="scroll-images  scroll-trigger animate--slide-in ">
+
+
+
+      {% for block in section.blocks %}
+      <div class="image-item" data-index="{{ forloop.index }}">
+        <img src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.title }}">
+      </div>
+      {% endfor %}
+      <div class="pagination-dots" style="display: none;">
+        {% for block in section.blocks %}
+        <span class="dot {% if forloop.first %}active{% endif %}" data-index="{{ forloop.index }}"></span>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+    </div>
+</section>
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const imageItems = document.querySelectorAll(".image-item");
+  const stickyLeft = document.querySelector(".sticky-left");
+  const contentItems = document.querySelectorAll(".content-item");
+const stickysection = document.querySelector(".sticky-scroll-container");
+ stickysection.className = "index_01";
+
+  
+
+  function isMobile() {
+    return window.innerWidth <= 768;
+  }
+
+  function updateStickyClassAndActiveContent() {
+    let newIndex = null;
+
+    imageItems.forEach((item) => {
+      const rect = item.getBoundingClientRect();
+      if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+        newIndex = item.getAttribute("data-index");
+      }
+    });
+
+    if (newIndex) {
+      const newClass = `index_${newIndex.padStart(2, "0")}`;
+      stickyLeft.className = `sticky-left ${newClass}`;
+stickysection.className = `${newClass}`;
+      // Update active class for content items
+      contentItems.forEach((contentItem) => {
+        if (contentItem.getAttribute("data-index") === newIndex) {
+          contentItem.classList.add("active");
+        } else {
+          contentItem.classList.remove("active");
+        }
+      });
+    }
+  }
+
+  function setInitialActiveState() {
+    if (isMobile()) {
+      // Set only data-index="1" as active initially
+      contentItems.forEach((contentItem) => {
+        if (contentItem.getAttribute("data-index") === "1") {
+          contentItem.classList.add("active");
+        } else {
+          contentItem.classList.remove("active");
+        }
+      });
+      stickyLeft.className = "sticky-left index_01";
+      stickysection.className = "index_01";
+    }
+  }
+
+  window.addEventListener("scroll", updateStickyClassAndActiveContent);
+  setInitialActiveState(); // Ensure correct initial state for mobile
+  updateStickyClassAndActiveContent(); // Ensure correct class and active state on load
+});
+
+
+
+</script>
+
+{% schema %}
+{
+  "name": "Sticky Scroll Section",
+  "blocks": [
+    {
+      "type": "image-text",
+      "name": "Image and Text",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Default Title"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Default text for the sticky content."
+        }
+        ,
+        {
+          "type": "url",
+          "id": "url",
+          "label": "url"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sticky Scroll Section",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}

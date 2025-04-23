@@ -1,0 +1,46 @@
+<div class="">
+  <div class="">
+    <div class="">
+      <div class="prose">
+        <a href="{{ routes.root_url }}">
+          <picture>
+            <source srcset="{{ section.settings.desktop_image | img_url: '1920x' }}" media="(min-width: 768px)">
+            <img src="{{ section.settings.mobile_image | img_url: '750x' }}" alt="404 Page Image" class="responsive-image">
+          </picture>
+        </a>
+     
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main_not_found.name",
+  "class": "shopify-section--404",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:global.colors.scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "image_picker",
+      "id": "desktop_image",
+      "label": "Desktop Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile Image"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:sections.main_not_found.button_link"
+    }
+  ]
+}
+{% endschema %}

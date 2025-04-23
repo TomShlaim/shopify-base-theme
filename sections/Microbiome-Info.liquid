@@ -1,0 +1,160 @@
+{% schema %}
+{
+  "name": "Microbiome Info Section",
+  "tag": "section",
+  "class": "microbiome-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "How Important is Gut Microbiome Health in Dogs?"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text Content",
+      "default": "<p>The gut accounts for 70%-80% of the immune system, making a healthy gut microbiome critically important to a dog’s overall health and well-being...</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Why is the microbiome important for my dog?"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Microbiome Info Section",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="microbiome-section padding-top-75  padding-bottom-75 mb-padding-right-left">
+  <div class="microbiome-content page-container" style="background: url({{ section.settings.image | img_url: 'master' }});  background-size: cover;  position: relative;">
+  <div class="elementor-background-overlay"></div>
+    <div class="microbiome-text">
+      <h2>{{ section.settings.heading }}</h2>
+      <div class="microbiome-description">
+        {{ section.settings.text }}
+      </div>
+      {% if section.settings.button_label != '' and section.settings.button_link != blank %}
+        <a href="{{ section.settings.button_link }}" class="button_grid_product">{{ section.settings.button_label }}</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<style>
+
+
+  .elementor-background-overlay {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+
+  .button_grid_product {
+        text-transform: none !important;
+  }
+
+  .elementor-background-overlay {
+    background-color: transparent;
+    background-image: linear-gradient(-90deg, #FFFFFF 0%, #F2295B00 65%);
+    opacity: 0.57;
+    transition: background 0.3s, border-radius 0.3s, opacity 0.3s;
+  }
+
+.microbiome-content {
+    border-radius: 25px 25px 25px 25px;
+}
+
+.microbiome-content {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.microbiome-descriptio {
+      font-size: 0.9rem;
+  }
+
+  .microbiome-content {
+    height: 30rem;
+
+  }
+
+.microbiome-text {
+  z-index: 1;
+    position: relative;
+    padding: 6rem 4rem;
+      width: 50%;
+    margin-left: auto;
+    padding: 6rem 4rem;
+}
+.microbiome-text h2 {
+    color: #20120A;
+margin-bottom: 1rem;
+    font-family: "DM Sans", Sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.2em;
+}
+  
+.microbiome-description {
+margin-bottom: 1rem;
+   z-index: 1;
+    position: relative;
+}
+.microbiome-button {
+    text-transform: none!important;
+}
+
+
+@media (max-width: 768px){
+
+  .elementor-background-overlay {
+     background-image: linear-gradient(0deg, #ffffff8c 0%, #F2295B00 65%)!important;
+  }
+        .microbiome-text {
+              padding-top: 360px !important;
+    padding-bottom: 50px !important;
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+
+
+  
+  
+
+  .microbiome-content  {
+    background: url(https://cdn.shopify.com/s/files/1/0916/1349/5608/files/mobile_1.jpg?v=1741266502) !important;
+    background: url(//gumpaws.com/cdn/shop/files/d-min.jpg?v=1741261009);
+    background-size: cover !important;
+    background-position: top center !important;
+  }
+
+.microbiome-text {
+     width: 100%!important;
+}
+
+  .microbiome-content {
+    height: auto!important;
+}
+}
+
+</style>

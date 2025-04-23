@@ -1,0 +1,195 @@
+<section class="main-himan-grade-et-feed-section padding-top-75 padding-bottom-75 page-container">
+  <div class="">
+    <div class="row">
+      <div class="col-xs-12 col-sm-4">
+        <div class="inner-single-tabs">
+          <h3 class="title-section align-center padding-bottom-25">{{ section.settings.title }}</h3>
+          <p class="sub-title align-center padding-bottom-50">{{ section.settings.subtitle }}</p>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-8">
+        <div class="inner-product-innner-tabs human-grade-et-colom">
+          {%- for block in section.blocks -%}
+          <div class="accordion-contianer-tabs-cstm-class">
+            <button class="accordion ">
+              <span class="text-left">{{ block.settings.ingredient_name }}</span>
+              <span class="text-right">{{ block.settings.ingredient_amount }}</span>
+<span class="animated-plus group-expanded:rotate" aria-hidden="true"></span>
+            </button>
+            <div class="panel" style="{% if forloop.first %}max-height: 0; opacity: 1;{% else %}max-height: 0; opacity: 1;{% endif %}">
+              <p>{{ block.settings.ingredient_description }}</p>
+            </div>
+          </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+/* General styling for the accordion */
+.main-himan-grade-et-feed-section .accordion {
+  background-color: transparent;
+  border: none;
+  text-align: left;
+    align-items: center;
+  width: 100%;
+  padding: 15px 0;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  border-bottom: 1px solid rgb(221 219 218);
+ 
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+  .main-himan-grade-et-feed-section .text-left {
+    width: 70%;
+  }
+.main-himan-grade-et-feed-section .accordion.active {
+ 
+}
+
+.main-himan-grade-et-feed-section .accordion:hover {
+  background-color: #f9f9f9;
+}
+
+/* Panel animation */
+.main-himan-grade-et-feed-section .panel {
+  max-height: 0;
+   
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+}
+
+.main-himan-grade-et-feed-section .panel.open {
+  opacity: 1;
+     padding-bottom: 1rem;
+      padding-top: 1rem;
+}
+
+
+.main-himan-grade-et-feed-section .animated-plus:before, .main-himan-grade-et-feed-section .animated-plus:after {
+    content: "";
+    background-color: #fff;
+}
+
+  .main-himan-grade-et-feed-section .animated-plus  {
+   width: 1.2rem;
+    background: #e85100;
+    height: 1.2rem;
+    border-radius: 100px;
+    padding: 5px !important;
+  }
+  .inner-single-tabs *{
+      text-align: left !important;
+  }
+.main-himan-grade-et-feed-section  .row{
+    display: flex;
+    gap: 10rem;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const accordions = document.querySelectorAll('.main-himan-grade-et-feed-section .accordion');
+
+  accordions.forEach((accordion) => {
+    accordion.addEventListener('click', function () {
+      const panel = this.nextElementSibling;
+      const isActive = this.classList.contains('active');
+
+      if (isActive) {
+        this.classList.remove('active');
+        panel.classList.remove('open');
+        panel.style.maxHeight = null;
+      } else {
+        accordions.forEach((acc) => {
+          acc.classList.remove('active');
+          const otherPanel = acc.nextElementSibling;
+          otherPanel.classList.remove('open');
+          otherPanel.style.maxHeight = null;
+        });
+
+        this.classList.add('active');
+        panel.classList.add('open');
+        panel.style.maxHeight = panel.scrollHeight + 'px';
+      }
+    });
+  });
+});
+</script>
+
+
+{% schema %}
+{
+  "name": "Accordion Formulation",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "The Formulation"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Made with only 12 essential active ingredients."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ingredient",
+      "name": "Ingredient",
+      "settings": [
+        {
+          "type": "text",
+          "id": "ingredient_name",
+          "label": "Ingredient Name",
+          "default": "Ingredient Name"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_amount",
+          "label": "Ingredient Amount",
+          "default": "100 mg"
+        },
+        {
+          "type": "textarea",
+          "id": "ingredient_description",
+          "label": "Ingredient Description",
+          "default": "This is the description of the ingredient."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accordion Formulation",
+      "category": "Custom Sections",
+      "blocks": [
+        {
+          "type": "ingredient",
+          "settings": {
+            "ingredient_name": "Glucosamine HCI",
+            "ingredient_amount": "200 mg",
+            "ingredient_description": "Glucosamine Hydrochloride is a natural amino sugar that reduces joint pain for dogs. Glucosamine assists in joint lubrication, helps maintain healthy cartilage, and sustains connective tissue."
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "ingredient_name": "MSM",
+            "ingredient_amount": "100 mg",
+            "ingredient_description": "Methylsulfonylmethane (MSM) is a natural antioxidant that reduces inflammation, stiffness, and hip, joint, and muscle pain in dogs. MSM also provides additional protection against infection."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

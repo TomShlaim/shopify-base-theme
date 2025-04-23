@@ -1,0 +1,97 @@
+{% schema %}
+{
+  "name": "Custom Gallery Section",
+  "settings": [
+   
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Upload Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Gallery",
+      "category": "Custom Sections",
+      "blocks": [
+        {"type": "image"},
+        {"type": "image"},
+        {"type": "image"},
+        {"type": "image"},
+        {"type": "image"}
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<section class="custom-gallery padding-top-75">
+  <div class="gallery-container">
+    <h2 class="title-section padding-bottom-50 mb-padding-right-left">Let's Stay <storng style="color: #ff4d00!important;">Connected</strong></h2>
+    <div class="overflow-scroll-mb">
+      <div class="gallery-images">
+        {% for block in section.blocks %}
+          {% if block.settings.image %}
+            <div class="gallery-item">
+              <img src="{{ block.settings.image | img_url: 'master' }}" alt="Gallery Image" loading="lazy">
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<style>
+
+ .gallery-container h2 strong {
+  color: #ff4d00!important;
+}
+  .custom-gallery {
+  text-align: center;
+  margin: 0rem 0;
+}
+
+
+.gallery-images {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0rem;
+  flex-wrap: wrap;
+}
+
+.gallery-item {
+  width: calc(20% - 0rem); 
+  overflow: hidden;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 0px;
+}
+
+@media (max-width: 768px){
+  .gallery-item {
+    min-width: 60vw;
+  }
+
+.gallery-images {
+    display: flex;
+    justify-content: flex-start;
+      gap: 0rem;
+    flex-wrap: nowrap;
+}
+}
+</style>

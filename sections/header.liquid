@@ -1,674 +1,630 @@
-<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
-<link
-  rel="stylesheet"
-  href="{{ 'component-cart-notification.css' | asset_url }}"
-  media="print"
-  onload="this.media='all'"
->
-
-{%- if settings.predictive_search_enabled -%}
-  <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
-{%- endif -%}
-
-{%- if section.settings.menu_type_desktop == 'mega' -%}
-  <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
-{%- endif -%}
-
 <style>
-  header-drawer {
-    justify-self: start;
-    margin-left: -1.2rem;
+  :root {
+    --header-is-sticky: {% if section.settings.enable_sticky %}1{% else %}0{% endif %};
   }
 
-  {%- if section.settings.sticky_header_type == 'reduce-logo-size' -%}
-    .scrolled-past-header .header__heading-logo-wrapper {
-      width: 75%;
+  #shopify-section-{{ section.id }} {
+    --header-grid: "primary-nav logo secondary-nav" / minmax(0, 1fr) auto minmax(0, 1fr);
+    --header-padding-block: 1rem;
+    --header-transparent-header-text-color: {{ section.settings.transparent_header_text_color.rgb }};
+    --header-separation-border-color: {% if section.settings.show_separation_border %}{{ section.settings.color_scheme.settings.text_color.rgb }} / 0.15{% else %}0 0 0 / 0{% endif %};
+
+    position: relative;
+    z-index: 4;
+  }
+
+  @media screen and (min-width: 700px) {
+    #shopify-section-{{ section.id }} {
+      --header-padding-block: {% if section.settings.reduce_padding %}1.2rem{% else %}1.6rem{% endif %};
+    }
+  }
+
+  @media screen and (min-width: 1000px) {
+    #shopify-section-{{ section.id }} {
+      {%- case section.settings.layout -%}
+        {%- when 'logo_left_navigation_inline' -%}
+          --header-grid: "logo primary-nav secondary-nav" / auto minmax(0, 1fr) auto;
+
+        {%- when 'logo_left_navigation_center' -%}
+          --header-grid: "logo primary-nav secondary-nav" / minmax(max-content, 1fr) auto minmax(max-content, 1fr);
+
+        {%- when 'logo_center_navigation_below' -%}
+          --header-grid: ". logo secondary-nav" "primary-nav primary-nav primary-nav" / minmax(0, 1fr) auto minmax(0, 1fr);
+      {%- endcase -%}
+    }
+  }
+
+  {%- if section.settings.enable_sticky -%}
+    #shopify-section-{{ section.id }} {
+      position: sticky;
+      top: 0;
+    }
+
+    .shopify-section--announcement-bar ~ #shopify-section-{{ section.id }} {
+      top: calc(var(--announcement-bar-is-sticky, 0) * var(--announcement-bar-height, 0px));
     }
   {%- endif -%}
 
-  {%- if section.settings.menu_type_desktop != "drawer" -%}
-    @media screen and (min-width: 990px) {
-      header-drawer {
-        display: none;
+  {%- if section.settings.logo != blank -%}
+    #shopify-section-{{ section.id }} {
+      --header-logo-width: {{ section.settings.logo_mobile_max_width }}px;
+    }
+
+    @media screen and (min-width: 700px) {
+      #shopify-section-{{ section.id }} {
+        --header-logo-width: {{ section.settings.logo_max_width }}px;
       }
     }
   {%- endif -%}
-
-  .menu-drawer-container {
-    display: flex;
-  }
-
-  .list-menu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .list-menu--inline {
-    display: inline-flex;
-    flex-wrap: wrap;
-  }
-
-  summary.list-menu__item {
-    padding-right: 2.7rem;
-  }
-
-  .list-menu__item {
-    display: flex;
-    align-items: center;
-    line-height: calc(1 + 0.3 / var(--font-body-scale));
-  }
-
-  .list-menu__item--link {
-    text-decoration: none;
-    padding-bottom: 1rem;
-    padding-top: 1rem;
-    line-height: calc(1 + 0.8 / var(--font-body-scale));
-  }
-
-  @media screen and (min-width: 750px) {
-    .list-menu__item--link {
-      padding-bottom: 0.5rem;
-      padding-top: 0.5rem;
-    }
-  }
 </style>
 
-{%- style -%}
-  .header {
-    padding: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px 3rem {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px 3rem;
-  }
+<height-observer variable="header">
+  <x-header {% if section.settings.hide_on_scroll and section.settings.enable_sticky %}hide-on-scroll{% endif %} class="header  page-container-header color-scheme color-scheme--{{ section.settings.color_scheme.id }}">
+    {%- comment -%}
+    --------------------------------------------------------------------------------------------------------------------
+    LOGO AREA
+    --------------------------------------------------------------------------------------------------------------------
+    {%- endcomment -%}
 
-  .section-header {
-    position: sticky; /* This is for fixing a Safari z-index issue. PR #2147 */
-    margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
-  }
+    {%- capture logo_content -%}
+      {%- if section.settings.logo -%}
+        {%- capture sizes -%}{{ section.settings.logo_max_width }}px{%- endcapture -%}
+        {%- capture widths -%}{{ section.settings.logo_max_width | times: 2 | at_most: section.settings.logo.width }}, {{ section.settings.logo_max_width | times: 3 | at_most: section.settings.logo.width }}{%- endcapture -%}
 
-  @media screen and (min-width: 750px) {
-    .section-header {
-      margin-bottom: {{ section.settings.margin_bottom }}px;
-    }
-  }
+        <span class="sr-only">{{ shop.name }}</span>
+        {{- section.settings.logo | image_url: width: section.settings.logo.width | image_tag: sizes: sizes, widths: widths, class: 'header__logo-image' -}}
 
-  @media screen and (min-width: 990px) {
-    .header {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
-{%- endstyle -%}
-
-<script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
-
-{%- liquid
-  for block in section.blocks
-    if block.type == '@app'
-      assign has_app_block = true
-    endif
-  endfor
--%}
-
-{% liquid
-  assign header_tag = 'div'
-
-  if section.settings.sticky_header_type != 'none'
-    assign header_tag = 'sticky-header'
-  endif
-%}
-
-<{{ header_tag }}
-  {% if header_tag == 'sticky-header' %}
-    data-sticky-type="{{ section.settings.sticky_header_type }}"
-  {% endif %}
-  class="header-wrapper color-{{ section.settings.color_scheme }} gradient{% if section.settings.show_line_separator %} header-wrapper--border-bottom{% endif %}"
->
-  {%- liquid
-    assign social_links = false
-    assign localization_forms = false
-
-    if settings.social_twitter_link != blank or settings.social_facebook_link != blank or settings.social_pinterest_link != blank or settings.social_instagram_link != blank or settings.social_youtube_link != blank or settings.social_vimeo_link != blank or settings.social_tiktok_link != blank or settings.social_tumblr_link != blank or settings.social_snapchat_link != blank
-      assign social_links = true
-    endif
-
-    if localization.available_countries.size > 1 and section.settings.enable_country_selector or section.settings.enable_language_selector and localization.available_languages.size > 1
-      assign localization_forms = true
-    endif
-  -%}
-  <header class="header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if localization_forms %} header--has-localizations{% endif %}">
-    {%- liquid
-      if section.settings.menu != blank
-        render 'header-drawer'
-      endif
-
-      if section.settings.logo_position == 'top-center' or section.settings.menu == blank
-        render 'header-search', input_id: 'Search-In-Modal-1'
-      endif
-    -%}
-
-    {%- if section.settings.logo_position != 'middle-center' -%}
-      {%- if request.page_type == 'index' -%}
-        <h1 class="header__heading">
-      {%- endif -%}
-      <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
-        {%- if settings.logo != blank -%}
-          <div class="header__heading-logo-wrapper">
-            {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
-            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
-            {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
-            {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
-            {{
-              settings.logo
-              | image_url: width: 600
-              | image_tag:
-                class: 'header__heading-logo motion-reduce',
-                widths: widths,
-                height: logo_height,
-                width: settings.logo_width,
-                alt: logo_alt,
-                sizes: sizes,
-                preload: true
-            }}
-          </div>
-        {%- else -%}
-          <span class="h2">{{ shop.name }}</span>
+        {%- if section.settings.transparent_logo -%}
+          {{- section.settings.transparent_logo | image_url: width: section.settings.transparent_logo.width | image_tag: sizes: sizes, widths: widths, class: 'header__logo-image header__logo-image--transparent' -}}
         {%- endif -%}
-      </a>
-      {%- if request.page_type == 'index' -%}
-        </h1>
+      {%- else -%}
+        <span class="header__heading header__logo-text h5">
+<svg xmlns="http://www.w3.org/2000/svg" id="uuid-c7b992f0-29f3-4d3f-b460-5230f5874fef" viewBox="0 0 1320.78 403.75"><defs><style>.uuid-83c5740a-e043-485a-a115-dbf145441c66{fill:#f25314;}.uuid-6af00d10-b85b-4562-9167-f1d784a5fbbd{fill:#fff;}</style></defs><path class="uuid-83c5740a-e043-485a-a115-dbf145441c66" d="M434.82,147.92c-1.71.49-3.64.82-5.83,1-2.19.18-4.5.22-6.93.09,4.98,2.79,9.06,6.56,12.21,11.3,3.16,4.74,4.74,10.87,4.74,18.4,0,8.99-1.71,16.22-5.1,21.68-3.41,5.47-7.66,9.84-12.76,13.12-5.09,3.28-10.6,5.8-16.48,7.56-5.89,1.76-11.38,3.49-16.48,5.19-5.1,1.7-9.36,3.74-12.76,6.1-3.4,2.37-5.1,5.8-5.1,10.29,0,2.79.39,5.04,1.19,6.74.78,1.7,1.76,3.03,2.91,4.01,1.15.97,2.46,1.64,3.92,2.01,1.46.36,2.86.55,4.19.55,2.92,0,5.43-.64,7.57-1.91,2.12-1.28,4.1-2.89,5.92-4.83s3.58-4.04,5.27-6.28c1.7-2.25,3.59-4.34,5.65-6.29,2.06-1.94,4.43-3.55,7.11-4.83,2.67-1.28,5.82-1.91,9.47-1.91,6.08,0,10.79,1.79,14.13,5.37,3.33,3.58,5.01,8.47,5.01,14.67,0,3.52-.55,6.83-1.65,9.93-1.08,3.1-2.61,5.8-4.55,8.11-1.95,2.3-4.31,4.12-7.1,5.46s-5.89,2.01-9.29,2.01c-3.05,0-5.42-.52-7.11-1.55s-2.97-2.46-3.82-4.28c-.86-1.82-1.34-3.95-1.46-6.38-.12-2.43-.06-5.1.18-8.02,0-.12-.03-.3-.09-.55s-.17-.46-.36-.64c-.18-.18-.36-.22-.55-.09-.17.12-.46.49-.82,1.09-1.21,2.55-2.86,5.16-4.91,7.83-2.07,2.67-4.68,5.1-7.83,7.29-3.16,2.19-6.87,3.94-11.11,5.28-4.25,1.33-9.23,2.01-14.95,2.01-3.28,0-6.59-.46-9.92-1.37-3.34-.91-6.36-2.34-9.03-4.28-2.67-1.95-4.85-4.38-6.55-7.29-1.7-2.92-2.55-6.32-2.55-10.2,0-5.47.97-9.96,2.92-13.48,1.93-3.52,4.46-6.47,7.55-8.83,3.1-2.37,6.66-4.34,10.66-5.92,4.01-1.58,8.11-3.13,12.3-4.65,4.19-1.52,8.29-3.22,12.3-5.1,4-1.88,7.56-4.37,10.66-7.47,3.09-3.1,5.61-6.92,7.56-11.48,1.94-4.55,2.91-10.29,2.91-17.21,0-4.01-.36-7.74-1.09-11.21-.73-3.46-1.82-6.5-3.28-9.11-1.45-2.61-3.3-4.65-5.56-6.1-2.25-1.46-4.95-2.19-8.11-2.19-4.49,0-8.08,1.67-10.75,5.01-2.68,3.34-4.01,8.47-4.01,15.4,0,3.16.3,6.17.91,9.02s1.52,5.37,2.73,7.56c1.22,2.19,2.7,3.92,4.47,5.19s3.79,1.91,6.1,1.91c1.59,0,3.34-.36,5.29-1.09,1.09-.48,2.18-.58,3.28-.27,1.09.31,1.88.85,2.37,1.64.48.79.6,1.88.36,3.28-.25,1.4-1.16,2.94-2.73,4.64-2.43,2.8-5.59,4.92-9.48,6.38-3.88,1.46-7.95,2.19-12.2,2.19-3.89,0-7.75-.6-11.57-1.82-3.83-1.21-7.23-3.1-10.2-5.65-2.98-2.55-5.41-5.77-7.28-9.65-1.88-3.89-2.83-8.5-2.83-13.85s1.06-10.63,3.19-15.49c2.12-4.86,5.25-9.08,9.38-12.66,4.13-3.58,9.21-6.41,15.22-8.47,6.01-2.06,12.9-3.1,20.68-3.1h3.37c1.15,0,2.34.06,3.56.18,5.22,0,9.38-.64,12.48-1.91,3.09-1.28,5.64-2.83,7.65-4.65,2.01-1.82,3.77-3.76,5.29-5.83,1.51-2.06,3.37-3.89,5.56-5.47,2.67-1.94,5.16-2.92,7.46-2.92,2.79,0,5.07,1.19,6.84,3.55,1.76,2.37,2.73,5.1,2.91,8.2s-.6,6.1-2.37,9.02-4.7,4.92-8.83,6.01Z"></path><path class="uuid-83c5740a-e043-485a-a115-dbf145441c66" d="M550.14,203.13c0,3.28.27,5.83.82,7.65.55,1.82,1.24,3.19,2.1,4.1.85.91,1.79,1.52,2.82,1.82,1.04.31,1.98.61,2.83.91.85.31,1.55.82,2.1,1.55.54.73.82,1.88.82,3.46,0,1.22-.71,2.7-2.1,4.46-1.4,1.76-3.28,3.46-5.64,5.1-2.37,1.64-5.16,3.01-8.38,4.1-3.22,1.09-6.66,1.64-10.3,1.64-6.8,0-11.54-1.31-14.21-3.92s-4.01-7.32-4.01-14.12c-4.62,5.71-9.87,10.11-15.75,13.21-5.89,3.1-12.48,4.65-19.77,4.65-8.86,0-15.7-2.52-20.49-7.56-4.8-5.04-7.2-12.9-7.2-23.59v-32.98c-.37-4.37-1.15-7.32-2.36-8.83-1.22-1.52-2.53-2.55-3.92-3.1-1.4-.55-2.61-1.06-3.64-1.55-1.03-.48-1.55-1.94-1.55-4.37,0-2.19,1.03-4.22,3.1-6.1,2.06-1.88,4.55-3.49,7.46-4.83,2.91-1.33,5.93-2.37,9.02-3.1,3.09-.73,5.74-1.09,7.93-1.09,6.31,0,10.75,1.19,13.3,3.55,2.55,2.37,3.83,6.53,3.83,12.48v45.73c0,3.89.88,6.71,2.64,8.47s3.97,2.64,6.65,2.64c1.94,0,3.98-.42,6.11-1.28,2.13-.85,4.15-2.1,6.1-3.74,1.95-1.64,3.67-3.61,5.2-5.92,1.51-2.3,2.64-4.85,3.37-7.65v-21.32c-.36-4.37-1.15-7.32-2.36-8.83-1.22-1.52-2.53-2.55-3.92-3.1-1.4-.55-2.61-1.06-3.64-1.55-1.04-.48-1.55-1.94-1.55-4.37,0-2.19,1.03-4.22,3.1-6.1,2.06-1.88,4.55-3.49,7.46-4.83,2.91-1.33,5.93-2.37,9.02-3.1,3.09-.73,5.75-1.09,7.93-1.09,6.31,0,10.75,1.19,13.3,3.55,2.55,2.37,3.83,6.53,3.83,12.48v46.46Z"></path><path class="uuid-83c5740a-e043-485a-a115-dbf145441c66" d="M725.77,204.58c.37,4.37,1.15,7.29,2.37,8.74,1.22,1.46,2.52,2.37,3.92,2.74,1.4.36,2.61.7,3.64,1,1.04.31,1.55,1.43,1.55,3.37,0,2.67-1.04,5.07-3.11,7.19-2.06,2.13-4.55,3.92-7.46,5.38-2.91,1.46-5.93,2.55-9.02,3.28-3.09.73-5.74,1.09-7.93,1.09-6.31,0-10.75-1.19-13.3-3.55-2.55-2.37-3.83-6.47-3.83-12.3v-45.73c0-3.89-.75-6.74-2.28-8.56-1.51-1.82-3.43-2.74-5.73-2.74-1.71,0-3.53.46-5.47,1.37-1.94.91-3.79,2.19-5.56,3.82-1.77,1.64-3.37,3.59-4.83,5.83-1.46,2.25-2.55,4.77-3.28,7.56v27.15c.49,3.52,1.28,6.08,2.37,7.65,1.1,1.58,2.18,2.79,3.28,3.64,1.09.85,2.06,1.64,2.91,2.37.86.73,1.28,2.06,1.28,4.01,0,1.58-.42,2.98-1.28,4.19-.85,1.21-2.28,2.25-4.28,3.1-2.01.85-4.71,1.46-8.11,1.82s-7.72.55-12.94.55-9.36-.18-12.76-.55-6.11-.97-8.1-1.82c-2.01-.85-3.44-1.88-4.29-3.1s-1.27-2.61-1.27-4.19c0-2.19.54-3.64,1.63-4.37,1.1-.73,2.31-1.61,3.64-2.64s2.56-2.64,3.64-4.83c1.1-2.19,1.65-5.77,1.65-10.75v-29.51c0-3.89-.79-6.74-2.37-8.56-1.59-1.82-3.52-2.74-5.83-2.74-1.7,0-3.49.46-5.38,1.37-1.88.91-3.7,2.19-5.46,3.82-1.76,1.64-3.34,3.59-4.74,5.83-1.4,2.25-2.46,4.77-3.19,7.56v20.04c0,5.59.55,9.63,1.65,12.12,1.08,2.49,2.3,4.28,3.64,5.37,1.33,1.09,2.54,2.04,3.64,2.83,1.09.79,1.63,2.28,1.63,4.46,0,1.58-.42,2.98-1.27,4.19s-2.28,2.25-4.29,3.1c-1.99.85-4.7,1.46-8.1,1.82-3.41.36-7.72.55-12.94.55s-9.54-.18-12.94-.55c-3.41-.36-6.11-.94-8.11-1.73-2-.79-3.4-1.79-4.19-3.01-.79-1.21-1.19-2.61-1.19-4.19,0-2.19.55-3.64,1.64-4.37,1.09-.73,2.28-1.61,3.56-2.64,1.27-1.03,2.46-2.58,3.55-4.65,1.1-2.06,1.65-5.46,1.65-10.2v-32.98c-.25-2.92-.68-5.16-1.28-6.74-.61-1.58-1.34-2.76-2.19-3.55s-1.76-1.3-2.73-1.55c-.97-.24-1.85-.55-2.64-.91-.79-.36-1.43-.91-1.92-1.64-.49-.73-.73-1.88-.73-3.46,0-1.33.67-2.85,2-4.55,1.33-1.7,3.19-3.34,5.56-4.92,2.37-1.57,5.16-2.91,8.38-4.01,3.22-1.09,6.71-1.64,10.47-1.64,6.32,0,10.75,1.19,13.3,3.56,2.55,2.37,3.82,6.53,3.82,12.48v4.74c4.49-6.56,9.54-11.66,15.13-15.3,5.58-3.64,11.9-5.47,18.95-5.47,6.68,0,12.21,1.79,16.58,5.38,4.37,3.58,7.23,9.02,8.56,16.31,4.49-6.8,9.59-12.12,15.31-15.94,5.7-3.83,12.2-5.74,19.49-5.74,8.01,0,14.33,2.55,18.95,7.65,4.62,5.1,6.92,13,6.92,23.69v32.98Z"></path><path class="uuid-83c5740a-e043-485a-a115-dbf145441c66" d="M777.5,152.66c3.77-4.49,8.32-7.86,13.67-10.11,5.35-2.25,10.93-3.37,16.76-3.37,5.23,0,10.39.94,15.49,2.82,5.1,1.89,9.65,4.68,13.66,8.38,4.01,3.7,7.23,8.38,9.65,14.03,2.43,5.65,3.64,12.3,3.64,19.95,0,9.23-1.33,17.13-4,23.69-2.67,6.56-6.31,11.94-10.93,16.12-4.62,4.19-10,7.23-16.12,9.11-6.14,1.89-12.67,2.83-19.59,2.83-3.77,0-7.5-.3-11.21-.91s-7.32-1.64-10.83-3.1v21.86c.36,4.37,1.09,7.53,2.18,9.47,1.1,1.94,2.24,3.4,3.46,4.37,1.22.97,2.31,1.82,3.28,2.55.97.73,1.45,2.12,1.45,4.19,0,1.58-.39,2.97-1.18,4.19-.79,1.21-2.18,2.21-4.19,3.01-2.01.78-4.71,1.39-8.11,1.82-3.4.42-7.72.64-12.94.64s-9.54-.21-12.94-.64c-3.4-.43-6.1-1.04-8.11-1.82-2-.79-3.4-1.79-4.19-3.01-.78-1.22-1.18-2.67-1.18-4.38,0-2.19.54-3.64,1.63-4.37,1.1-.73,2.28-1.64,3.56-2.73,1.28-1.09,2.46-2.88,3.56-5.37,1.09-2.49,1.63-6.59,1.63-12.3v-76.52c-.24-2.92-.66-5.16-1.27-6.74s-1.33-2.74-2.18-3.46c-.86-.73-1.77-1.21-2.73-1.46-.97-.24-1.85-.48-2.65-.73s-1.43-.61-1.92-1.09c-.49-.48-.73-1.39-.73-2.73,0-2.67.97-5.04,2.92-7.11,1.94-2.06,4.3-3.83,7.1-5.28,2.79-1.46,5.68-2.55,8.66-3.28,2.97-.73,5.56-1.09,7.74-1.09,5.71,0,9.84.94,12.39,2.82,2.55,1.89,4.07,5.13,4.55,9.75ZM777.69,202.4c0,3.4.49,6.44,1.46,9.11.97,2.67,2.24,4.92,3.81,6.74,1.59,1.82,3.44,3.19,5.56,4.1,2.13.91,4.29,1.37,6.47,1.37,2.56,0,5.13-.64,7.75-1.91,2.61-1.28,4.92-3.25,6.92-5.92,2-2.67,3.65-6.07,4.92-10.2,1.27-4.13,1.92-8.99,1.92-14.58,0-6.44-.61-11.9-1.82-16.4-1.22-4.49-2.79-8.17-4.74-11.02-1.95-2.85-4.13-4.92-6.56-6.2-2.43-1.28-4.91-1.91-7.47-1.91-2.31,0-4.55.49-6.73,1.46-2.18.97-4.13,2.34-5.83,4.1-1.7,1.76-3.07,3.89-4.1,6.37-1.03,2.49-1.55,5.26-1.55,8.29v26.6Z"></path><path class="uuid-83c5740a-e043-485a-a115-dbf145441c66" d="M945.31,204.58c.24,2.92.66,5.13,1.27,6.65.61,1.52,1.33,2.68,2.18,3.46.85.79,1.77,1.34,2.74,1.64.97.31,1.84.61,2.65.91.78.31,1.42.82,1.91,1.55.48.73.73,1.88.73,3.46,0,2.31-.97,4.37-2.92,6.19-1.94,1.82-4.31,3.4-7.1,4.74-2.8,1.34-5.68,2.37-8.66,3.1-2.97.73-5.56,1.09-7.75,1.09-6.31,0-10.75-1.19-13.3-3.55-2.55-2.37-3.83-6.47-3.83-12.3-.97,2.55-2.49,4.83-4.55,6.83-2.06,2.01-4.43,3.74-7.1,5.19-2.68,1.46-5.62,2.55-8.83,3.28-3.23.73-6.47,1.09-9.75,1.09-3.64,0-7.26-.46-10.85-1.37-3.58-.91-6.77-2.37-9.56-4.37-2.79-2.01-5.07-4.56-6.83-7.65-1.77-3.1-2.65-6.83-2.65-11.21,0-4.61.91-8.32,2.73-11.11,1.83-2.79,4.13-5.1,6.92-6.92,2.79-1.82,5.77-3.34,8.92-4.56,3.16-1.21,6.14-2.4,8.93-3.55,2.79-1.15,5.1-2.49,6.92-4.01s2.73-3.61,2.73-6.29c0-1.21-.42-2.21-1.27-3.01-.86-.79-1.95-1.19-3.28-1.19-.97,0-1.88.18-2.73.55-.86.36-1.73.76-2.65,1.18-.91.43-1.91.82-3.01,1.19-1.09.36-2.43.55-4,.55-3.89,0-6.87-1.12-8.93-3.37-2.06-2.25-3.09-5.07-3.09-8.47s1.15-6.74,3.45-9.65c2.31-2.92,5.38-5.38,9.2-7.38,3.83-2.01,8.17-3.56,13.03-4.65,4.86-1.09,9.84-1.64,14.95-1.64s10.63.64,15.85,1.91c5.22,1.28,9.87,3.28,13.93,6.01,4.07,2.74,7.35,6.23,9.84,10.48,2.49,4.25,3.74,9.35,3.74,15.3v29.88ZM913.24,160.68c0-4.01-1.3-7.08-3.91-9.2-2.62-2.12-5.5-3.19-8.66-3.19-3.4,0-6.53,1.28-9.38,3.83-2.86,2.55-4.29,6.56-4.29,12.03,2.55-.61,4.77-.52,6.66.27,1.88.79,3.42,1.95,4.65,3.46,1.21,1.52,2.09,3.25,2.64,5.19.55,1.95.82,3.77.82,5.47,0,3.16-.82,5.62-2.46,7.38-1.64,1.76-3.4,3.49-5.28,5.19-1.88,1.7-3.64,3.74-5.29,6.1-1.63,2.37-2.45,5.8-2.45,10.29,0,3.52,1,6.1,3,7.74,2.01,1.64,4.4,2.46,7.2,2.46,1.94,0,3.89-.39,5.83-1.18s3.74-1.94,5.37-3.46c1.65-1.52,2.98-3.37,4.02-5.56,1.02-2.19,1.54-4.74,1.54-7.65v-39.17Z"></path><path class="uuid-83c5740a-e043-485a-a115-dbf145441c66" d="M1093.79,139.36c4.01,0,7.23,1.09,9.65,3.28,2.43,2.19,3.65,5.71,3.65,10.57,0,3.04-.46,6.32-1.37,9.84-.91,3.52-2.06,7.01-3.45,10.48s-2.92,6.83-4.55,10.11c-1.65,3.28-3.13,6.26-4.47,8.92l-22.05,42.81c-.72,1.46-1.76,2.55-3.09,3.28-1.33.73-2.73,1.09-4.19,1.09-1.33,0-2.64-.36-3.92-1.09s-2.28-1.82-3.01-3.28l-22.04-45.55-23.33,45.55c-.72,1.46-1.76,2.55-3.09,3.28-1.33.73-2.73,1.09-4.19,1.09-1.33,0-2.64-.36-3.92-1.09s-2.28-1.82-3.01-3.28l-28.24-58.48c-2.31-4.62-4.34-7.89-6.1-9.84-1.77-1.94-4.17-3.21-7.2-3.83-1.82-.36-3.61-1.06-5.38-2.09-1.76-1.03-2.65-2.76-2.65-5.19,0-1.82.68-3.67,2.01-5.56s3.09-3.58,5.28-5.1,4.73-2.76,7.65-3.74c2.92-.97,5.89-1.46,8.93-1.46,4.61,0,8.85,1.25,12.75,3.74,3.89,2.49,7.22,6.53,10.02,12.12l20.96,40.99c3.16-8.14,5.43-14.27,6.83-18.4s2.1-7.23,2.1-9.29c-1.94-3.28-4.92-5.28-8.92-6.01-1.82-.24-3.61-.91-5.38-2-1.77-1.09-2.65-2.85-2.65-5.28,0-1.82.68-3.67,2.01-5.56s3.09-3.58,5.28-5.1,4.7-2.76,7.56-3.74c2.86-.97,5.8-1.46,8.84-1.46,4.62,0,8.9,1.25,12.84,3.74,3.95,2.49,7.32,6.47,10.11,11.93l21.51,42.27.91-2.19c1.82-4.49,3.3-8.29,4.46-11.39,1.15-3.1,2.1-5.68,2.83-7.74.72-2.06,1.21-3.8,1.46-5.19.24-1.4.36-2.58.36-3.56,0-2.67-.71-4.58-2.1-5.74-1.4-1.15-2.97-2.1-4.73-2.82-1.77-.73-3.34-1.58-4.74-2.55s-2.1-2.55-2.1-4.74c0-2.31.79-4.28,2.37-5.92s3.52-2.94,5.83-3.92c2.31-.97,4.7-1.7,7.19-2.19,2.5-.48,4.65-.73,6.47-.73Z"></path><path class="uuid-83c5740a-e043-485a-a115-dbf145441c66" d="M1141.34,158.31c0,3.52,1.19,6.47,3.56,8.84,2.36,2.37,5.35,4.55,8.92,6.56,3.58,2,7.47,3.95,11.66,5.83,4.19,1.88,8.07,4.13,11.66,6.74,3.59,2.61,6.56,5.77,8.92,9.47,2.37,3.7,3.56,8.35,3.56,13.94,0,4.74-1.25,8.9-3.73,12.48-2.5,3.58-5.75,6.59-9.75,9.02-4.01,2.43-8.57,4.25-13.67,5.46-5.1,1.21-10.32,1.82-15.68,1.82-4.85,0-9.59-.55-14.21-1.64-4.62-1.09-8.71-2.74-12.29-4.92-3.59-2.19-6.47-4.95-8.66-8.29-2.19-3.34-3.28-7.26-3.28-11.75,0-2.43.67-4.58,2-6.47,1.33-1.88,2.95-3.49,4.84-4.83,1.88-1.33,3.94-2.34,6.19-3.01,2.25-.67,4.29-1,6.11-1,3.04,0,5.4,1.12,7.11,3.37,1.7,2.25,2.54,6.29,2.54,12.12s1.28,10.29,3.83,13.03c2.55,2.73,5.22,4.1,8.01,4.1,2.43,0,4.62-.91,6.55-2.73,1.95-1.82,2.92-4.49,2.92-8.02s-1.12-6.74-3.38-9.29c-2.24-2.55-5.04-4.86-8.38-6.92-3.34-2.06-6.95-4.1-10.84-6.1-3.89-2.01-7.5-4.28-10.84-6.83-3.34-2.55-6.13-5.56-8.38-9.02-2.25-3.46-3.38-7.62-3.38-12.48s1.12-9.05,3.38-12.57c2.24-3.52,5.16-6.44,8.74-8.74,3.58-2.31,7.65-4.01,12.2-5.1,4.56-1.09,9.2-1.64,13.94-1.64,4.25,0,8.41.46,12.48,1.37,4.07.91,7.68,2.25,10.84,4.01,3.16,1.76,5.68,3.89,7.56,6.37,1.88,2.49,2.83,5.38,2.83,8.65,0,2.43-.55,4.59-1.64,6.47-1.09,1.88-2.49,3.46-4.18,4.74-1.71,1.28-3.56,2.22-5.56,2.83-2.01.61-3.99.91-5.93.91-4.01,0-6.55-1.33-7.65-4.01-1.09-2.67-1.27-6.2-.55-10.57.25-1.82.13-3.46-.36-4.92-.49-1.46-1.18-2.7-2.09-3.74-.92-1.03-2.01-1.79-3.28-2.28-1.28-.48-2.59-.73-3.92-.73-2.18,0-4.19.76-6.01,2.28-1.82,1.52-2.73,3.92-2.73,7.2Z"></path><path class="uuid-83c5740a-e043-485a-a115-dbf145441c66" d="M286.85,165.25c-4.7-4.96-10.83-7.8-17.3-8.53-6.03-.68-10.52-5.26-10.98-11.31-.51-6.64-3.23-13-8.22-17.92-11.98-11.81-32.57-10.19-44.64,3.27-18.78,20.95-15.45,52.52-12.4,71.65,1.44,9.01,8.26,15.87,17.29,17.33,19.22,3.11,48.91,8.9,70.51-8.68,14.92-12.14,18.05-32.81,5.75-45.81Z"></path><ellipse class="uuid-83c5740a-e043-485a-a115-dbf145441c66" cx="245.27" cy="256.92" rx="28.4" ry="21.16" transform="translate(-92.7 366.2) rotate(-64.25)"></ellipse><ellipse class="uuid-83c5740a-e043-485a-a115-dbf145441c66" cx="158.52" cy="167.14" rx="28.4" ry="21.16" transform="translate(-53.95 78.14) rotate(-23.79)"></ellipse><ellipse class="uuid-83c5740a-e043-485a-a115-dbf145441c66" cx="191.51" cy="255.77" rx="28.4" ry="21.16" transform="translate(-127.76 268.47) rotate(-55.45)"></ellipse><ellipse class="uuid-83c5740a-e043-485a-a115-dbf145441c66" cx="158.18" cy="221.28" rx="28.4" ry="21.16" transform="translate(-104.49 150.63) rotate(-39.39)"></ellipse><path class="uuid-6af00d10-b85b-4562-9167-f1d784a5fbbd" d="M219.91,137.47c-7.23,4.56-2.42,18.39,5.92,13.13,7.23-4.56,2.42-18.39-5.92-13.13Z"></path><path class="uuid-6af00d10-b85b-4562-9167-f1d784a5fbbd" d="M421.13,238.01c-4.79.9-5.15,9.25.38,8.21,4.79-.9,5.15-9.25-.38-8.21Z"></path><path class="uuid-6af00d10-b85b-4562-9167-f1d784a5fbbd" d="M865.97,203.39c-4.79.9-5.15,9.25.38,8.21,4.79-.9,5.15-9.25-.38-8.21Z"></path></svg></span>
       {%- endif -%}
-    {%- endif -%}
+    {%- endcapture -%}
 
-    {%- liquid
-      if section.settings.menu != blank
-        if section.settings.menu_type_desktop == 'dropdown'
-          render 'header-dropdown-menu'
-        elsif section.settings.menu_type_desktop != 'drawer'
-          render 'header-mega-menu'
-        endif
-      endif
-    %}
-
-    {%- if section.settings.logo_position == 'middle-center' -%}
-      {%- if request.page_type == 'index' -%}
-        <h1 class="header__heading">
-      {%- endif -%}
-      <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
-        {%- if settings.logo != blank -%}
-          <div class="header__heading-logo-wrapper">
-            {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
-            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
-            {% capture sizes %}(min-width: 750px) {{ settings.logo_width }}px, 50vw{% endcapture %}
-            {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
-            {{
-              settings.logo
-              | image_url: width: 600
-              | image_tag:
-                class: 'header__heading-logo',
-                widths: widths,
-                height: logo_height,
-                width: settings.logo_width,
-                alt: logo_alt,
-                sizes: sizes,
-                preload: true
-            }}
-          </div>
-        {%- else -%}
-          <span class="h2">{{ shop.name }}</span>
-        {%- endif -%}
-      </a>
-      {%- if request.page_type == 'index' -%}
-        </h1>
-      {%- endif -%}
-    {%- endif -%}
-
-    <div class="header__icons{% if section.settings.enable_country_selector or section.settings.enable_language_selector %} header__icons--localization header-localization{% endif %}">
-      <div class="desktop-localization-wrapper">
-        {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
-          <localization-form class="small-hide medium-hide" data-prevent-hide>
-            {%- form 'localization', id: 'HeaderCountryForm', class: 'localization-form' -%}
-              <div>
-                <h2 class="visually-hidden" id="HeaderCountryLabel">{{ 'localization.country_label' | t }}</h2>
-                {%- render 'country-localization', localPosition: 'HeaderCountry' -%}
-              </div>
-            {%- endform -%}
-          </localization-form>
-        {% endif %}
-
-        {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
-          <localization-form class="small-hide medium-hide" data-prevent-hide>
-            {%- form 'localization', id: 'HeaderLanguageForm', class: 'localization-form' -%}
-              <div>
-                <h2 class="visually-hidden" id="HeaderLanguageLabel">{{ 'localization.language_label' | t }}</h2>
-                {%- render 'language-localization', localPosition: 'HeaderLanguage' -%}
-              </div>
-            {%- endform -%}
-          </localization-form>
-        {%- endif -%}
-      </div>
-      {% render 'header-search', input_id: 'Search-In-Modal' %}
-
-      {%- if shop.customer_accounts_enabled -%}
-        <a
-          href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
-          class="header__icon header__icon--account link focus-inset{% if section.settings.menu != blank %} small-hide{% endif %}"
-          rel="nofollow"
-        >
-          {%- if section.settings.enable_customer_avatar -%}
-            <account-icon>
-              {%- if customer and customer.has_avatar? -%}
-                {{ customer | avatar }}
-              {%- else -%}
-                <span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
-              {%- endif -%}
-            </account-icon>
-          {%- else -%}
-            <span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
-          {%- endif -%}
-          <span class="visually-hidden">
-            {%- liquid
-              if customer
-                echo 'customer.account_fallback' | t
-              else
-                echo 'customer.log_in' | t
-              endif
-            -%}
-          </span>
-        </a>
-      {%- endif -%}
-
-      {%- for block in section.blocks -%}
-        {%- case block.type -%}
-          {%- when '@app' -%}
-            {% render block %}
-        {%- endcase -%}
-      {%- endfor -%}
-
-      <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
-        {% if cart == empty %}
-          <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
-        {% else %}
-          <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
-        {% endif %}
-        <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
-        {%- if cart != empty -%}
-          <div class="cart-count-bubble">
-            {%- if cart.item_count < 100 -%}
-              <span aria-hidden="true">{{ cart.item_count }}</span>
-            {%- endif -%}
-            <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
-          </div>
-        {%- endif -%}
-      </a>
-    </div>
-  </header>
-</{{ header_tag }}>
-
-{%- if settings.cart_type == 'notification' -%}
-  {%- render 'cart-notification',
-    color_scheme: section.settings.color_scheme,
-    desktop_menu_type: section.settings.menu_type_desktop
-  -%}
-{%- endif -%}
-
-{% javascript %}
-  class StickyHeader extends HTMLElement {
-    constructor() {
-      super();
-    }
-
-    connectedCallback() {
-      this.header = document.querySelector('.section-header');
-      this.headerIsAlwaysSticky =
-        this.getAttribute('data-sticky-type') === 'always' ||
-        this.getAttribute('data-sticky-type') === 'reduce-logo-size';
-      this.headerBounds = {};
-
-      this.setHeaderHeight();
-
-      window.matchMedia('(max-width: 990px)').addEventListener('change', this.setHeaderHeight.bind(this));
-
-      if (this.headerIsAlwaysSticky) {
-        this.header.classList.add('shopify-section-header-sticky');
-      }
-
-      this.currentScrollTop = 0;
-      this.preventReveal = false;
-      this.predictiveSearch = this.querySelector('predictive-search');
-
-      this.onScrollHandler = this.onScroll.bind(this);
-      this.hideHeaderOnScrollUp = () => (this.preventReveal = true);
-
-      this.addEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
-      window.addEventListener('scroll', this.onScrollHandler, false);
-
-      this.createObserver();
-    }
-
-    setHeaderHeight() {
-      document.documentElement.style.setProperty('--header-height', `${this.header.offsetHeight}px`);
-    }
-
-    disconnectedCallback() {
-      this.removeEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
-      window.removeEventListener('scroll', this.onScrollHandler);
-    }
-
-    createObserver() {
-      let observer = new IntersectionObserver((entries, observer) => {
-        this.headerBounds = entries[0].intersectionRect;
-        observer.disconnect();
-      });
-
-      observer.observe(this.header);
-    }
-
-    onScroll() {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-      if (this.predictiveSearch && this.predictiveSearch.isOpen) return;
-
-      if (scrollTop > this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
-        this.header.classList.add('scrolled-past-header');
-        if (this.preventHide) return;
-        requestAnimationFrame(this.hide.bind(this));
-      } else if (scrollTop < this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
-        this.header.classList.add('scrolled-past-header');
-        if (!this.preventReveal) {
-          requestAnimationFrame(this.reveal.bind(this));
-        } else {
-          window.clearTimeout(this.isScrolling);
-
-          this.isScrolling = setTimeout(() => {
-            this.preventReveal = false;
-          }, 66);
-
-          requestAnimationFrame(this.hide.bind(this));
-        }
-      } else if (scrollTop <= this.headerBounds.top) {
-        this.header.classList.remove('scrolled-past-header');
-        requestAnimationFrame(this.reset.bind(this));
-      }
-
-      this.currentScrollTop = scrollTop;
-    }
-
-    hide() {
-      if (this.headerIsAlwaysSticky) return;
-      this.header.classList.add('shopify-section-header-hidden', 'shopify-section-header-sticky');
-      this.closeMenuDisclosure();
-      this.closeSearchModal();
-    }
-
-    reveal() {
-      if (this.headerIsAlwaysSticky) return;
-      this.header.classList.add('shopify-section-header-sticky', 'animate');
-      this.header.classList.remove('shopify-section-header-hidden');
-    }
-
-    reset() {
-      if (this.headerIsAlwaysSticky) return;
-      this.header.classList.remove('shopify-section-header-hidden', 'shopify-section-header-sticky', 'animate');
-    }
-
-    closeMenuDisclosure() {
-      this.disclosures = this.disclosures || this.header.querySelectorAll('header-menu');
-      this.disclosures.forEach((disclosure) => disclosure.close());
-    }
-
-    closeSearchModal() {
-      this.searchModal = this.searchModal || this.header.querySelector('details-modal');
-      this.searchModal.close(false);
-    }
-  }
-
-  customElements.define('sticky-header', StickyHeader);
-{% endjavascript %}
-
-<script type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": "Organization",
-    "name": {{ shop.name | json }},
-    {% if settings.logo %}
-      "logo": {{ settings.logo | image_url: width: 500 | prepend: "https:" | json }},
+    {%- if request.page_type == 'index' -%}
+      <h1 class="header__logo">
+        <a href="{{ routes.root_url }}">{{ logo_content }}</a>
+      </h1>
+    {% else %}
+      <a href="{{ routes.root_url }}" class="header__logo">{{ logo_content }}</a>
     {% endif %}
-    "sameAs": [
-      {{ settings.social_twitter_link | json }},
-      {{ settings.social_facebook_link | json }},
-      {{ settings.social_pinterest_link | json }},
-      {{ settings.social_instagram_link | json }},
-      {{ settings.social_tiktok_link | json }},
-      {{ settings.social_tumblr_link | json }},
-      {{ settings.social_snapchat_link | json }},
-      {{ settings.social_youtube_link | json }},
-      {{ settings.social_vimeo_link | json }}
-    ],
-    "url": {{ request.origin | append: page.url | json }}
-  }
+
+    {%- comment -%}
+    --------------------------------------------------------------------------------------------------------------------
+    PRIMARY NAVIGATION AREA
+    --------------------------------------------------------------------------------------------------------------------
+    {%- endcomment -%}
+
+    {%- assign menu = section.settings.menu -%}
+    {%- assign sidebar_menu = section.settings.sidebar_menu -%}
+
+    {%- if menu.links.size > 0 or sidebar_menu.links.size > 0 -%}
+      <nav class="header__primary-nav {% if section.settings.layout == 'logo_center_navigation_below' or section.settings.layout == 'logo_left_navigation_center' %}header__primary-nav--center{% endif %}" aria-label="{{ 'header.general.primary_navigation' | t | escape }}">
+        <button type="button" aria-controls="sidebar-menu" {% unless section.settings.layout == 'drawer' %}class="md:hidden"{% endunless %}>
+          <span class="sr-only">{{ 'header.general.menu' | t }}</span>
+          {%- render 'icon' with 'hamburger', class: 'header__nav-icon' -%}
+        </button>
+
+        {%- if menu.links.size > 0 and section.settings.layout != 'drawer' -%}
+          <ul class="contents unstyled-list md-max:hidden">
+            {%- for link in menu.links -%}
+              {% liquid
+                assign link_title_downcase = link.title | strip | downcase
+                assign mega_menu_block = ''
+
+                for block in section.blocks
+                  assign menu_item_downcase = block.settings.menu_item | strip | downcase
+
+                  if menu_item_downcase == link_title_downcase
+                    assign mega_menu_block = block
+                    break
+                  endif
+
+                endfor
+              %}
+
+              <li class="header__primary-nav-item" data-title="{{ link.title | escape }}">
+                {%- if link.levels == 0 and mega_menu_block == '' -%}
+                  <a href="{{ link.url }}" class="block {% if section.settings.menu_text_font == 'heading' %}h6{% endif %}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title }}</a>
+                {%- else -%}
+                  {%- capture disclosure_content -%}
+                    <details class="header__menu-disclosure">
+                      <summary data-follow-link="{{ link.url }}" {% if section.settings.menu_text_font == 'heading' %}class="h6"{% endif %}>
+                        {{- link.title -}}
+                      </summary>
+
+                      {%- if mega_menu_block != '' -%}
+                        {%- render 'mega-menu', link: link, block: mega_menu_block -%}
+                      {%- else -%}
+                        <ul class="header__dropdown-menu {% if link.levels <= 1 %}header__dropdown-menu--restrictable{% endif %} unstyled-list" role="list">
+                          {%- for sub_link in link.links -%}
+                            <li>
+                              {%- if sub_link.levels == 0 -%}
+                                <a href="{{ sub_link.url }}" class="link-faded-reverse" {% if sub_link.current %}aria-current="page"{% endif %}>{{ sub_link.title }}</a>
+                              {%- else -%}
+                                <dropdown-menu-disclosure follow-summary-link trigger="{{ section.settings.menu_open_trigger }}" class="contents">
+                                  <details class="header__menu-disclosure">
+                                    <summary data-follow-link="{{ sub_link.url }}" class="link-faded-reverse">
+                                      <div class="h-stack gap-4 justify-between">
+                                        {{- sub_link.title -}}
+                                        {%- render 'icon' with 'arrow-right', width: 8, direction_aware: true -%}
+                                      </div>
+                                    </summary>
+
+                                    <ul class="header__dropdown-menu unstyled-list" role="list">
+                                      {%- for sub_sub_link in sub_link.links -%}
+                                        <li>
+                                          <a href="{{ sub_sub_link.url }}" class="link-faded-reverse" {% if sub_sub_link.current %}aria-current="page"{% endif %}>{{ sub_sub_link.title }}</a>
+                                        </li>
+                                      {%- endfor -%}
+                                    </ul>
+                                  </details>
+                                </dropdown-menu-disclosure>
+                              {%- endif -%}
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+                    </details>
+                  {%- endcapture -%}
+
+                  {% if mega_menu_block != '' %}
+                    <mega-menu-disclosure follow-summary-link trigger="{{ section.settings.menu_open_trigger }}" class="contents">
+                      {{- disclosure_content -}}
+                    </mega-menu-disclosure>
+                  {%- else -%}
+                    <dropdown-menu-disclosure follow-summary-link trigger="{{ section.settings.menu_open_trigger }}">
+                      {{- disclosure_content -}}
+                    </dropdown-menu-disclosure>
+                  {%- endif -%}
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </nav>
+    {%- endif -%}
+
+    {%- comment -%}
+    --------------------------------------------------------------------------------------------------------------------
+    SECONDARY NAVIGATION AREA
+    --------------------------------------------------------------------------------------------------------------------
+    {%- endcomment -%}
+
+    <nav class="header__secondary-nav" aria-label="{{ 'header.general.secondary_navigation' | t | escape }}">
+      {%- liquid
+        if section.settings.show_country_selector and localization.available_countries.size > 1
+          assign show_country_selector = true
+        endif
+
+        if section.settings.show_locale_selector and localization.available_languages.size > 1
+          assign show_locale_selector = true
+        endif
+      -%}
+
+      <ul class="contents unstyled-list">
+        {%- if show_country_selector or show_locale_selector -%}
+          <li class="localization-selectors md-max:hidden">
+            {%- if show_country_selector -%}
+              {%- render 'localization-selector', type: 'country', placement: 'bottom-end', show_country_name: section.settings.show_country_name, show_country_flag: section.settings.show_country_flag, id_prefix: 'header-nav' -%}
+            {%- endif -%}
+
+            {%- if show_locale_selector -%}
+              {%- render 'localization-selector', type: 'locale', placement: 'bottom-end', id_prefix: 'header-nav' -%}
+            {%- endif -%}
+          </li>
+        {%- endif -%}
+
+        {%- comment -%}Offer a hook for apps to integrate into the header to add their own icon, for instance{%- endcomment -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == '@app' -%}
+            <li>
+              {%- render block -%}
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if shop.customer_accounts_enabled -%}
+          <li class="header__account-link sm-max:hidden">
+            <a href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}">
+              <span class="sr-only">{% if customer %}{{ 'header.general.account' | t }}{% else %}{{ 'header.general.login' | t }}{% endif %}</span>
+
+              {%- if section.settings.show_icons -%}
+                {%- render 'icon' with 'account', class: 'header__nav-icon' -%}
+              {%- else -%}
+                <span class="md:hidden">{%- render 'icon' with 'account', class: 'header__nav-icon' -%}</span>
+
+                <span class="{% if section.settings.menu_text_font == 'heading' %}h6{% endif %} link-faded md-max:hidden" aria-hidden="true">
+                  {%- if customer -%}
+                    {{- 'header.general.account' | t -}}
+                  {%- else -%}
+                    {{- 'header.general.login' | t -}}
+                  {%- endif -%}
+                </span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+
+        {%- if section.settings.enable_search -%}
+          <li class="header__search-link">
+            <a href="{{ routes.search_url }}" aria-controls="header-search-{{ section.id }}">
+              <span class="sr-only">{{ 'header.general.search' | t }}</span>
+
+              {%- if section.settings.show_icons -%}
+                {%- render 'icon' with 'search', class: 'header__nav-icon' -%}
+              {%- else -%}
+                <span class="md:hidden">{%- render 'icon' with 'search', class: 'header__nav-icon' -%}</span>
+                <span class="{% if section.settings.menu_text_font == 'heading' %}h6{% endif %} link-faded md-max:hidden" aria-hidden="true">{{ 'header.general.search' | t }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+
+        <li class="relative header__cart-link">
+          <a href="{{ routes.cart_url }}" {% if settings.cart_type != 'page' and request.page_type != 'cart' %}aria-controls="cart-drawer"{% endif %} data-no-instant>
+            <span class="sr-only">{{ 'header.general.cart' | t }}</span>
+
+            {%- if section.settings.show_icons -%}
+              {%- render 'icon' with 'cart', class: 'header__nav-icon' -%}
+            {%- else -%}
+              <span class="md:hidden">{%- render 'icon' with 'cart', class: 'header__nav-icon' -%}</span>
+              <span class="{% if section.settings.menu_text_font == 'heading' %}h6{% endif %} link-faded md-max:hidden">{{ 'header.general.cart' | t }} (<cart-count>{{ cart.item_count }}</cart-count>)</span>
+            {%- endif -%}
+
+            <cart-dot class="header__cart-dot {% unless cart.empty? %}is-visible{% endunless %} {% unless section.settings.show_icons %}md:hidden{% endunless %}"></cart-dot>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    {%- if section.settings.enable_search -%}
+      {%- render 'header-search' -%}
+    {%- endif -%}
+
+    {%- assign sidebar_menu = section.settings.sidebar_menu | default: section.settings.menu -%}
+
+    {%- if sidebar_menu.links.size > 0 -%}
+      {%- render 'header-sidebar', menu: sidebar_menu, color_scheme: section.settings.sidebar_color_scheme, show_dividers: section.settings.sidebar_show_dividers, open_second_level_menus: section.settings.sidebar_open_second_level_menus -%}
+    {%- endif -%}
+  </x-header>
+</height-observer>
+
+<script>
+  document.documentElement.style.setProperty('--header-height', `${document.getElementById('shopify-section-{{ section.id }}').clientHeight.toFixed(2)}px`);
 </script>
-
-{%- if request.page_type == 'index' -%}
-  {% assign potential_action_target = request.origin | append: routes.search_url | append: '?q={search_term_string}' %}
-  <script type="application/ld+json">
-    {
-      "@context": "http://schema.org",
-      "@type": "WebSite",
-      "name": {{ shop.name | json }},
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {{ potential_action_target | json }},
-        "query-input": "required name=search_term_string"
-      },
-      "url": {{ request.origin | append: page.url | json }}
-    }
-  </script>
-{%- endif -%>
-
-{%- if request.page_type == 'index' -%}
-  {% assign potential_action_target = request.origin | append: routes.search_url | append: '?q={search_term_string}' %}
-  <script type="application/ld+json">
-    {
-      "@context": "http://schema.org",
-      "@type": "WebSite",
-      "name": {{ shop.name | json }},
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {{ potential_action_target | json }},
-        "query-input": "required name=search_term_string"
-      },
-      "url": {{ request.origin | append: page.url | json }}
-    }
-  </script>
-{%- endif -%}
 
 {% schema %}
 {
   "name": "t:sections.header.name",
-  "class": "section-header",
-  "max_blocks": 3,
+  "class": "shopify-section--header",
+  "tag": "header",
   "settings": [
     {
-      "type": "select",
-      "id": "logo_position",
-      "options": [
-        {
-          "value": "top-left",
-          "label": "t:sections.header.settings.logo_position.options__2.label"
-        },
-        {
-          "value": "top-center",
-          "label": "t:sections.header.settings.logo_position.options__3.label"
-        },
-        {
-          "value": "middle-left",
-          "label": "t:sections.header.settings.logo_position.options__1.label"
-        },
-        {
-          "value": "middle-center",
-          "label": "t:sections.header.settings.logo_position.options__4.label"
-        }
-      ],
-      "default": "middle-left",
-      "label": "t:sections.header.settings.logo_position.label",
-      "info": "t:sections.header.settings.logo_help.content"
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:global.colors.scheme",
+      "default": "scheme-2"
     },
     {
-      "type": "select",
-      "id": "mobile_logo_position",
-      "options": [
-        {
-          "value": "center",
-          "label": "t:sections.header.settings.mobile_logo_position.options__1.label"
-        },
-        {
-          "value": "left",
-          "label": "t:sections.header.settings.mobile_logo_position.options__2.label"
-        }
-      ],
-      "default": "center",
-      "label": "t:sections.header.settings.mobile_logo_position.label"
+      "type": "checkbox",
+      "id": "enable_sticky",
+      "label": "t:sections.header.enable_sticky_header",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_scroll",
+      "label": "t:sections.header.hide_on_scroll",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_separation_border",
+      "label": "t:sections.header.show_separation_border",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "reduce_padding",
+      "label": "t:sections.header.reduce_padding",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.logo_category"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:global.image.image",
+      "info": "t:sections.header.logo_size_recommendation"
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "min": 20,
+      "max": 300,
+      "step": 5,
+      "unit": "px",
+      "label": "t:global.image.width",
+      "default": 140
+    },
+    {
+      "type": "range",
+      "id": "logo_mobile_max_width",
+      "min": 20,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "t:global.image.mobile_width",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.navigation_category"
     },
     {
       "type": "link_list",
       "id": "menu",
-      "default": "main-menu",
-      "label": "t:sections.header.settings.menu.label"
+      "label": "t:sections.header.menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "link_list",
+      "id": "sidebar_menu",
+      "label": "t:sections.header.mobile_menu"
     },
     {
       "type": "select",
-      "id": "menu_type_desktop",
+      "id": "menu_open_trigger",
+      "label": "t:sections.header.menu_open_trigger",
+      "info": "t:sections.header.menu_open_trigger_info",
       "options": [
         {
-          "value": "dropdown",
-          "label": "t:sections.header.settings.menu_type_desktop.options__1.label"
+          "value": "hover",
+          "label": "t:sections.header.menu_open_trigger_options.hover"
         },
         {
-          "value": "mega",
-          "label": "t:sections.header.settings.menu_type_desktop.options__2.label"
+          "value": "click",
+          "label": "t:sections.header.menu_open_trigger_options.click"
+        }
+      ],
+      "default": "hover"
+    },
+    {
+      "type": "select",
+      "id": "menu_text_font",
+      "label": "t:sections.header.menu_text_font",
+      "options": [
+        {
+          "value": "heading",
+          "label": "t:sections.header.menu_text_font_options.heading"
+        },
+        {
+          "value": "body",
+          "label": "t:sections.header.menu_text_font_options.body"
+        }
+      ],
+      "default": "heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_search",
+      "label": "t:sections.header.enable_search",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.sidebar_navigation_category"
+    },
+    {
+      "type": "color_scheme",
+      "id": "sidebar_color_scheme",
+      "label": "t:global.colors.scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "select",
+      "id": "sidebar_text_font",
+      "label": "t:sections.header.sidebar_text_font",
+      "options": [
+        {
+          "value": "heading",
+          "label": "t:sections.header.sidebar_text_font_options.heading"
+        },
+        {
+          "value": "body",
+          "label": "t:sections.header.sidebar_text_font_options.body"
+        }
+      ],
+      "default": "heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "sidebar_show_dividers",
+      "label": "t:sections.header.sidebar_show_dividers",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "sidebar_open_second_level_menus",
+      "label": "t:sections.header.sidebar_open_second_level_menus",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.desktop_category"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:sections.header.layout",
+      "options": [
+        {
+          "value": "logo_left_navigation_inline",
+          "label": "t:sections.header.layout_options.logo_left_navigation_inline"
+        },
+        {
+          "value": "logo_left_navigation_center",
+          "label": "t:sections.header.layout_options.logo_left_navigation_center"
+        },
+        {
+          "value": "logo_center_navigation_inline",
+          "label": "t:sections.header.layout_options.logo_center_navigation_inline"
+        },
+        {
+          "value": "logo_center_navigation_below",
+          "label": "t:sections.header.layout_options.logo_center_navigation_below"
         },
         {
           "value": "drawer",
-          "label": "t:sections.header.settings.menu_type_desktop.options__3.label"
+          "label": "t:sections.header.layout_options.drawer"
         }
       ],
-      "default": "dropdown",
-      "label": "t:sections.header.settings.menu_type_desktop.label"
-    },
-    {
-      "type": "select",
-      "id": "sticky_header_type",
-      "options": [
-        {
-          "value": "none",
-          "label": "t:sections.header.settings.sticky_header_type.options__1.label"
-        },
-        {
-          "value": "on-scroll-up",
-          "label": "t:sections.header.settings.sticky_header_type.options__2.label"
-        },
-        {
-          "value": "always",
-          "label": "t:sections.header.settings.sticky_header_type.options__3.label"
-        },
-        {
-          "value": "reduce-logo-size",
-          "label": "t:sections.header.settings.sticky_header_type.options__4.label"
-        }
-      ],
-      "default": "on-scroll-up",
-      "label": "t:sections.header.settings.sticky_header_type.label"
+      "default": "logo_left_navigation_inline"
     },
     {
       "type": "checkbox",
-      "id": "show_line_separator",
-      "default": true,
-      "label": "t:sections.header.settings.show_line_separator.label"
+      "id": "show_icons",
+      "label": "t:sections.header.show_icons",
+      "default": true
     },
     {
       "type": "header",
-      "content": "t:sections.header.settings.header__1.content"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:sections.all.colors.label",
-      "default": "scheme-1"
-    },
-    {
-      "type": "color_scheme",
-      "id": "menu_color_scheme",
-      "label": "t:sections.header.settings.menu_color_scheme.label",
-      "default": "scheme-1"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.header.settings.header__utilities.content"
+      "content": "t:global.localization.country_region_selector_category",
+      "info": "t:global.localization.country_region_selector_category_info"
     },
     {
       "type": "checkbox",
-      "id": "enable_country_selector",
-      "default": true,
-      "label": "t:sections.header.settings.enable_country_selector.label",
-      "info": "t:sections.header.settings.enable_country_selector.info"
+      "id": "show_country_selector",
+      "label": "t:global.localization.show_country_region_selector",
+      "default": true
     },
     {
       "type": "checkbox",
-      "id": "enable_language_selector",
-      "default": true,
-      "label": "t:sections.header.settings.enable_language_selector.label",
-      "info": "t:sections.header.settings.enable_language_selector.info"
+      "id": "show_country_name",
+      "label": "t:global.localization.show_country_name",
+      "default": false
     },
     {
       "type": "checkbox",
-      "id": "enable_customer_avatar",
-      "default": true,
-      "label": "t:sections.header.settings.enable_customer_avatar.label",
-      "info": "t:sections.header.settings.enable_customer_avatar.info"
+      "id": "show_country_flag",
+      "label": "t:global.localization.show_country_flag",
+      "default": true
     },
     {
       "type": "header",
-      "content": "t:sections.all.spacing"
+      "content": "t:global.localization.language_selector_category",
+      "info": "t:global.localization.language_selector_category_info"
     },
     {
-      "type": "range",
-      "id": "margin_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.header.settings.margin_bottom.label",
-      "default": 0
+      "type": "checkbox",
+      "id": "show_locale_selector",
+      "label": "t:global.localization.show_locale_selector",
+      "default": false
     },
     {
       "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
+      "content": "t:sections.header.transparent_header_category"
     },
     {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 36,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
-      "default": 20
+      "type": "paragraph",
+      "content": "t:sections.header.transparent_header_info"
     },
     {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 36,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
-      "default": 20
+      "type": "color",
+      "id": "transparent_header_text_color",
+      "label": "t:global.colors.text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "image_picker",
+      "id": "transparent_logo",
+      "label": "t:sections.header.transparent_header_logo_image",
+      "info": "t:sections.header.transparent_header_logo_size_recommendation"
     }
   ],
   "blocks": [
     {
-      "type": "@app"
+      "type": "mega_menu",
+      "name": "t:sections.header.blocks.mega_menu.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "menu_item",
+          "label": "t:sections.header.blocks.mega_menu.menu_item",
+          "info": "t:sections.header.blocks.mega_menu.menu_item_info"
+        },
+        {
+          "type": "select",
+          "id": "images_position",
+          "label": "t:sections.header.blocks.mega_menu.images_position",
+          "options": [
+            {
+              "value": "left",
+              "label": "t:global.position.left"
+            },
+            {
+              "value": "right",
+              "label": "t:global.position.right"
+            }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.header.blocks.mega_menu.image_1"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "t:global.image.image",
+          "info": "t:sections.header.blocks.mega_menu.image_size_recommendation"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "image_1_heading",
+          "label": "t:global.text.heading"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "image_1_text",
+          "label": "t:global.text.text"
+        },
+        {
+          "type": "url",
+          "id": "image_1_link",
+          "label": "t:global.text.link"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.header.blocks.mega_menu.image_2"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "t:global.image.image",
+          "info": "t:sections.header.blocks.mega_menu.image_size_recommendation"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "image_2_heading",
+          "label": "t:global.text.heading"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "image_2_text",
+          "label": "t:global.text.text"
+        },
+        {
+          "type": "url",
+          "id": "image_2_link",
+          "label": "t:global.text.link"
+        }
+      ]
     }
   ]
 }
