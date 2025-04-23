@@ -1,614 +1,484 @@
-{%- if section.settings.image != blank or section.blocks.size > 0 -%}
-  {%- comment -%}
-  ------------------------------------------------------------------------------------------------------------------------
-  CSS
-  ------------------------------------------------------------------------------------------------------------------------
-  {%- endcomment -%}
+{{ 'component-image-with-text.css' | asset_url | stylesheet_tag }}
 
-  <style>
-    #shopify-section-{{ section.id }} {
-      --image-with-text-content-max-width: {% if section.settings.content_width == 'sm' %}430px{% elsif section.settings.content_width == 'md' %}780px{% else %}100%{% endif %};
-    }
-  </style>
-
-  {%- comment -%}
-  ------------------------------------------------------------------------------------------------------------------------
-  LIQUID
-  ------------------------------------------------------------------------------------------------------------------------
-  {%- endcomment -%}
-
-  {%- assign color_scheme_hash = section.settings.color_scheme.settings.background_gradient | default: section.settings.color_scheme.settings.background | md5 -%}
-
-  <div class="{% unless section.settings.remove_vertical_spacing %}section-spacing{% endunless %} color-scheme color-scheme--{{ section.settings.color_scheme.id }} color-scheme--bg-{{ color_scheme_hash }} {% if section.settings.separate_section_with_border %}bordered-section{% endif %}">
-    <image-with-text class="image-with-text  padding-top-75 ContainerGrid padding-bottom-75 {% if section.settings.image_position == 'end' %}image-with-text--reverse{% endif %}" style="position: relative; overflow: visible;">
-      {%- if section.settings.image != blank -%}
-        <picture>
-          {%- assign sizes = '(max-width: 699px) 100vw, 50vw' -%}
-
-          {%- if section.settings.mobile_image != blank -%}
-            <source
-                media="(max-width: 699px)"
-                srcset="{{ section.settings.mobile_image | image_url: width: 400 }} 400w, {{ section.settings.mobile_image | image_url: width: 600 }} 600w, {{ section.settings.mobile_image | image_url: width: 800 }} 800w, {{ section.settings.mobile_image | image_url: width: 1000 }} 1000w"
-                width="{{ section.settings.mobile_image.width }}"
-                height="{{ section.settings.mobile_image.height }}"
-            >
-          {%- endif -%}
-
-          {{- section.settings.image | image_url: width: section.settings.image.width | image_tag: sizes: sizes, widths: '200,300,400,500,600,700,800,900,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200', reveal-on-scroll: section.settings.reveal_on_scroll -}}
-        </picture>
-      {%- else -%}
-        {{- 'image' | placeholder_svg_tag: 'placeholder' -}}
-      {%- endif -%}
-
-           {%- if section.settings.Stamp -%}
-<img class="stamp" src="https://cdn.shopify.com/s/files/1/0916/1349/5608/files/Patent-Panding-Paw_1.svg?v=1734509418" alt="Stamp image" style="width: 8rem;height: 8rem" />
-         {%- endif -%}
-      <div class="prose text-center sm:text-start">
-        {%- for block in section.blocks -%}
-          {%- case block.type -%}
-            {%- when 'subheading' -%}
-              {%- if block.settings.text != blank -%}
-                <p class="h6" {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
-              {%- endif -%}
-
-
-{%- when 'directions_block_2' -%}
-
-
-<div class="health-dog-directions-colom" {{ block.shopify_attributes }}>
-  <ul class="custom-table">
-      <li class="table-header">
-      <span class="center-column">Our Gummies</span>
-      <span class="right-column">The Others</span>
-    </li>
-    <li>
-      <span class="left-column">No Fillers</span>
-      <span class="right-column">Inflammatory fillers. Low-quality fillers like corn gluten meal, wheat gluten, soy and soy derivatives can cause inflammation.</span>
-    </li>
-    <li>
-      <span class="left-column">No Sugar No Artificial</span>
-      <span class="right-column">May contain chemical additives used to enhance appearance, as well as artificial sweeteners & hydrogenated oils.</span>
-    </li>
-    <li>
-      <span class="left-column">Looks amazing and give you the feeling you’re giving your dog something you would eat</span>
-      <span class="right-column">Ask yourself how come my dog wanting something that looks and smells like this.</span>
-    </li>
-    <li>
-      <span class="left-column">One of a kind formulas and technology reinventing how dog treats shield look like</span>
-      <span class="right-column">Copy cats and you can get anywhere in China :)</span>
-    </li>
-    <li>
-      <span class="left-column">20 years of supplements experience with world-leading technology</span>
-      <span class="right-column">New players that start their way into the supplements world.</span>
-    </li>
-    <li>
-      <span class="left-column">Human quality products</span>
-      <span class="right-column">Not at all</span>
-    </li>
-  </ul>
-</div>
-
-{%- when 'directions_block' -%}
-<div class="health-dog-directions-colom" {{ block.shopify_attributes }}>
-  <ul class="custom-table">
-    <li class="table-header">
-      <span class="left-column"></span>
-      <span class="center-column">Gummies</span>
-      <span class="right-column">The Others</span>
-    </li>
-    <li>
-      <span class="left-column">Yeast</span>
-      <span class="center-column"><img src="{{'yes.svg' | asset_url }}" width="25" ></span>
-      <span class="right-column"><img src="{{'no.svg' | asset_url }}" width="25" ></span>
-    </li>
-    <li>
-      <span class="left-column">Starch</span>
-      <span class="center-column"><img src="{{'yes.svg' | asset_url }}" width="25" ></span>
-      <span class="right-column"><img src="{{'no.svg' | asset_url }}" width="25" ></span>
-    </li>
-    <li>
-      <span class="left-column">Flours</span>
-      <span class="center-column"><img src="{{'yes.svg' | asset_url }}" width="25" ></span>
-      <span class="right-column"><img src="{{'no.svg' | asset_url }}" width="25" ></span>
-    </li>
-    <li>
-      <span class="left-column">Gluten Free</span>
-      <span class="center-column"><img src="{{'yes.svg' | asset_url }}" width="25" ></span>
-      <span class="right-column"><img src="{{'no.svg' | asset_url }}" width="25" ></span>
-    </li>
-    <li>
-      <span class="left-column">Fat Free</span>
-      <span class="center-column"><img src="{{'yes.svg' | asset_url }}" width="25" ></span>
-      <span class="right-column"><img src="{{'no.svg' | asset_url }}" width="25" ></span>
-    </li>
-    <li>
-      <span class="left-column">Prebiotic Dietary Fibers</span>
-      <span class="center-column"><img src="{{'yes.svg' | asset_url }}" width="25" ></span>
-      <span class="right-column"><img src="{{'no.svg' | asset_url }}" width="25" ></span>
-    </li>
-    <li>
-      <span class="left-column">Dental Care Support</span>
-      <span class="center-column"><img src="{{'yes.svg' | asset_url }}" width="25" ></span>
-      <span class="right-column"><img src="{{'no.svg' | asset_url }}" width="25" ></span>
-    </li>
-    <li>
-      <span class="left-column">Citrus Fibers</span>
-      <span class="center-column"><img src="{{'yes.svg' | asset_url }}" width="25" ></span>
-      <span class="right-column"><img src="{{'no.svg' | asset_url }}" width="25" ></span>
-    </li>
-  </ul>
-</div>
-
-
-
-            {%- when 'heading' -%}
-              {%- if block.settings.text != blank -%}
-                <p class="title-section pb-25" {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
-              {%- endif -%}
-
-            {%- when 'richtext' -%}
-              {%- if block.settings.content != blank -%}
-                <div {{ block.shopify_attributes }}>
-                  {{- block.settings.content -}}
-                </div>
-              {%- endif -%}
-
-            {%- when 'page' -%}
-              {%- if block.settings.page.content != blank -%}
-                <div {{ block.shopify_attributes }}>
-                  {{- block.settings.page.content -}}
-                </div>
-              {%- endif -%}
-
-            {%- when 'liquid' -%}
-              {%- if block.settings.liquid != blank -%}
-                <div {{ block.shopify_attributes }}>
-                  {{- block.settings.liquid -}}
-                </div>
-              {%- endif -%}
-
-            {%- when 'link' -%}
-              <a {% if block.settings.url %}href="{{ block.settings.url }}"{% endif %} class="link" {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</a>
-
-            {%- when 'button' -%}
-              {%- if block.settings.text != blank -%}
-<a href="{{ block.settings.url }}" class="cta_button">
-{{ block.settings.text }}
-</a>
-              {%- endif -%}
-          {%- endcase -%}
-        {%- endfor -%}
-      </div>
-    </image-with-text>
-  </div>
-{%- endif -%}
-
-
-          {%- if section.settings.Stamp -%}
-<script>
-const stampElement = document.querySelector('.stamp');
-let elementStart = 0;
-
-if (stampElement) {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        elementStart = window.scrollY;
-        window.addEventListener('scroll', rotateOnScroll);
-      } else {
-        window.removeEventListener('scroll', rotateOnScroll);
-      }
-    });
-  }, { threshold: 0.1 });
-
-  observer.observe(stampElement);
-
-  function rotateOnScroll() {
-    const scrollPosition = window.scrollY - elementStart;
-    const rotationAngle = scrollPosition * 0.05;
-    stampElement.style.transform = `rotate(${rotationAngle}deg)`;
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
-}
 
-            </script>
-         {%- endif -%}
-      
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign fetch_priority = 'auto'
+  if section.index == 1
+    assign fetch_priority = 'high'
+  endif
+  if section.settings.color_scheme == section.settings.section_color_scheme and section.settings.content_layout == 'no-overlap'
+    assign remove_color_classes = true
+  endif
+-%}
+
+<div class="section-{{ section.id }}-padding gradient color-{{ section.settings.section_color_scheme }}">
+  <div class="page-width">
+    <div class="image-with-text image-with-text--{{ section.settings.content_layout }} isolate{% if settings.text_boxes_border_thickness > 0 and settings.text_boxes_border_opacity > 0 and settings.media_border_thickness > 0 and settings.media_border_opacity > 0 %} collapse-borders{% endif %}{% unless section.settings.color_scheme == section.settings.section_color_scheme and settings.media_border_thickness > 0 and settings.text_boxes_shadow_opacity == 0 and settings.text_boxes_border_thickness == 0 or settings.text_boxes_border_opacity == 0 %} collapse-corners{% endunless %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      <div class="image-with-text__grid grid grid--gapless grid--1-col grid--{% if section.settings.desktop_image_width == 'medium' %}2-col-tablet{% else %}3-col-tablet{% endif %}{% if section.settings.layout == 'text_first' %} image-with-text__grid--reverse{% endif %}">
+        <div class="image-with-text__media-item image-with-text__media-item--{{ section.settings.desktop_image_width }} image-with-text__media-item--{{ section.settings.desktop_content_position }} grid__item">
+          <div
+            class="image-with-text__media image-with-text__media--{{ section.settings.height }} global-media-settings{% unless remove_color_classes %} gradient color-{{ section.settings.color_scheme }}{% else %} background-transparent{% endunless %}{% if section.settings.image != blank %} media{% else %} image-with-text__media--placeholder placeholder{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}"
+            {% if section.settings.height == 'adapt' and section.settings.image != blank %}
+              style="padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;"
+            {% endif %}
+          >
+            {%- if section.settings.image != blank -%}
+              {%- if section.settings.image_behavior == 'ambient' or section.settings.image_behavior == 'zoom-in' -%}
+                {%- assign widths = '198, 432, 642, 900, 1284, 1800' -%}
+                {%- capture sizes -%}
+              (min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 1.6667 }}px,
+              (min-width: 750px) calc((100vw - 130px) / 1.667), calc((100vw - 50px) / 1.667)
+            {%- endcapture -%}
+              {%- else -%}
+                {%- assign widths = '165, 360, 535, 750, 1070, 1500' -%}
+                {%- capture sizes -%}
+              (min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 2 }}px,
+              (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)
+            {%- endcapture -%}
+              {%- endif -%}
+              {{
+                section.settings.image
+                | image_url: width: 1500
+                | image_tag: sizes: sizes, widths: widths, fetchpriority: fetch_priority
+              }}
+            {%- else -%}
+              {{ 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            {%- endif -%}
+          </div>
+        </div>
+        <div class="image-with-text__text-item grid__item">
+          <div
+            id="ImageWithText--{{ section.id }}"
+            class="image-with-text__content image-with-text__content--{{ section.settings.desktop_content_position }} image-with-text__content--desktop-{{ section.settings.desktop_content_alignment }} image-with-text__content--mobile-{{ section.settings.mobile_content_alignment }} image-with-text__content--{{ section.settings.height }} content-container{% unless remove_color_classes %} gradient color-{{ section.settings.color_scheme }}{% else %} background-transparent{% endunless %}"
+          >
+            {%- for block in section.blocks -%}
+              {% case block.type %}
+                {%- when 'heading' -%}
+                  <h2
+                    class="image-with-text__heading inline-richtext {{ block.settings.heading_size }}"
+                    {{ block.shopify_attributes }}
+                  >
+                    {{ block.settings.heading }}
+                  </h2>
+                {%- when 'caption' -%}
+                  <p
+                    class="image-with-text__text image-with-text__text--caption {{ block.settings.text_style }} {{ block.settings.text_style }}--{{ block.settings.text_size }} {{ block.settings.text_style }}"
+                    {{ block.shopify_attributes }}
+                  >
+                    {{ block.settings.caption | escape }}
+                  </p>
+                {%- when 'text' -%}
+                  <div class="image-with-text__text rte {{ block.settings.text_style }}" {{ block.shopify_attributes }}>
+                    {{ block.settings.text }}
+                  </div>
+                {%- when 'button' -%}
+                  {%- if block.settings.button_label != blank -%}
+                    <a
+                      {% if block.settings.button_link == blank %}
+                        role="link" aria-disabled="true"
+                      {% else %}
+                        href="{{ block.settings.button_link }}"
+                      {% endif %}
+                      class="button{% if block.settings.button_style_secondary %} button--secondary{% else %} button--primary{% endif %}"
+                      {{ block.shopify_attributes }}
+                    >
+                      {{ block.settings.button_label | escape }}
+                    </a>
+                  {%- endif -%}
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% schema %}
 {
-  "name": "t:sections.image_with_text.name",
-  "class": "shopify-section--image-with-text",
-  "tag": "section",
-  "max_blocks": 6,
+  "name": "t:sections.image-with-text.name",
+  "class": "section",
   "disabled_on": {
-    "groups": ["header", "custom.overlay"]
+    "groups": ["header", "footer"]
   },
   "settings": [
     {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.image-with-text.settings.image.label"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.image-with-text.settings.height.options__1.label"
+        },
+        {
+          "value": "small",
+          "label": "t:sections.image-with-text.settings.height.options__2.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.image-with-text.settings.height.options__3.label"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.image-with-text.settings.height.options__4.label"
+        }
+      ],
+      "default": "adapt",
+      "label": "t:sections.image-with-text.settings.height.label"
+    },
+    {
+      "type": "select",
+      "id": "desktop_image_width",
+      "options": [
+        {
+          "value": "small",
+          "label": "t:sections.image-with-text.settings.desktop_image_width.options__1.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.image-with-text.settings.desktop_image_width.options__2.label"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.image-with-text.settings.desktop_image_width.options__3.label"
+        }
+      ],
+      "default": "medium",
+      "label": "t:sections.image-with-text.settings.desktop_image_width.label"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "options": [
+        {
+          "value": "image_first",
+          "label": "t:sections.image-with-text.settings.layout.options__1.label"
+        },
+        {
+          "value": "text_first",
+          "label": "t:sections.image-with-text.settings.layout.options__2.label"
+        }
+      ],
+      "default": "image_first",
+      "label": "t:sections.image-with-text.settings.layout.label"
+    },
+    {
+      "type": "select",
+      "id": "image_behavior",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.all.animation.image_behavior.options__1.label"
+        },
+        {
+          "value": "ambient",
+          "label": "t:sections.all.animation.image_behavior.options__2.label"
+        },
+        {
+          "value": "zoom-in",
+          "label": "t:sections.all.animation.image_behavior.options__4.label"
+        }
+      ],
+      "default": "none",
+      "label": "t:sections.all.animation.image_behavior.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.image-with-text.settings.header.content"
+    }, 
+    {
+      "type": "select",
+      "id": "content_layout",
+      "options": [
+        {
+          "value": "no-overlap",
+          "label": "t:sections.image-with-text.settings.content_layout.options__1.label"
+        },
+        {
+          "value": "overlap",
+          "label": "t:sections.image-with-text.settings.content_layout.options__2.label"
+        }
+      ],
+      "default": "no-overlap",
+      "label": "t:sections.image-with-text.settings.content_layout.label"
+    },       
+    {
+      "type": "select",
+      "id": "desktop_content_position",
+      "options": [
+        {
+          "value": "top",
+          "label": "t:sections.image-with-text.settings.desktop_content_position.options__1.label"
+        },
+        {
+          "value": "middle",
+          "label": "t:sections.image-with-text.settings.desktop_content_position.options__2.label"
+        },
+        {
+          "value": "bottom",
+          "label": "t:sections.image-with-text.settings.desktop_content_position.options__3.label"
+        }
+      ],
+      "default": "top",
+      "label": "t:sections.image-with-text.settings.desktop_content_position.label"
+    },
+    {
+      "type": "select",
+      "id": "desktop_content_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.image-with-text.settings.desktop_content_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.image-with-text.settings.desktop_content_alignment.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.image-with-text.settings.desktop_content_alignment.options__3.label"
+        }
+      ],
+      "default": "left",
+      "label": "t:sections.image-with-text.settings.desktop_content_alignment.label"
+    },
+    {
+      "type": "select",
+      "id": "mobile_content_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.image-with-text.settings.mobile_content_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.image-with-text.settings.mobile_content_alignment.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.image-with-text.settings.mobile_content_alignment.options__3.label"
+        }
+      ],
+      "default": "left",
+      "label": "t:sections.image-with-text.settings.mobile_content_alignment.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.image-with-text.settings.header_colors.content"
+    },        
+    {
       "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:global.colors.scheme",
+      "id": "section_color_scheme",
+      "label": "t:sections.all.colors.label",
       "default": "scheme-1"
     },
     {
-      "type": "checkbox",
-      "id": "separate_section_with_border",
-      "label": "t:global.section.separate_section_with_border",
-      "default": true
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.multirow.settings.container_color_scheme.label",
+      "default": "scheme-1"
     },
     {
-      "type": "image_picker",
-      "id": "image",
-      "label": "t:global.image.image",
-      "info": "t:sections.image_with_text.image_size_recommendation"
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
     },
     {
-      "type": "image_picker",
-      "id": "mobile_image",
-      "label": "t:global.image.mobile_image",
-      "info": "t:sections.image_with_text.mobile_image_size_recommendation"
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
     },
     {
-      "type": "checkbox",
-      "id": "reveal_on_scroll",
-      "label": "t:global.animation.reveal_image_on_scroll",
-      "default": true
-    },
-     {
-      "type": "checkbox",
-      "id": "Stamp",
-      "label": "Stamp Mark",
-      "default": false
-    },
-    {
-      "type": "select",
-      "id": "image_position",
-      "label": "t:sections.image_with_text.image_position",
-      "options": [
-        {
-          "value": "start",
-          "label": "t:global.position.left"
-        },
-        {
-          "value": "end",
-          "label": "t:global.position.right"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "content_width",
-      "label": "t:global.sizes.content_width",
-      "options": [
-        {
-          "value": "sm",
-          "label": "t:global.sizes.small"
-        },
-        {
-          "value": "md",
-          "label": "t:global.sizes.medium"
-        },
-        {
-          "value": "lg",
-          "label": "t:global.sizes.large"
-        }
-      ],
-      "default": "sm"
-    },
-    {
-      "type": "checkbox",
-      "id": "remove_vertical_spacing",
-      "label": "t:global.spacing.remove_vertical_spacing",
-      "default": true
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
     }
   ],
   "blocks": [
     {
-      "type": "subheading",
-      "name": "t:sections.image_with_text.blocks.subheading.name",
-      "settings": [
-        {
-          "type": "inline_richtext",
-          "id": "text",
-          "label": "t:global.text.text",
-          "default": "Subheading"
-        }
-      ]
-    },
-    {
       "type": "heading",
-      "name": "t:sections.image_with_text.blocks.heading.name",
+      "name": "t:sections.image-with-text.blocks.heading.name",
+      "limit": 1,
       "settings": [
         {
           "type": "inline_richtext",
-          "id": "text",
-          "label": "t:global.text.text",
-          "default": "Heading"
+          "id": "heading",
+          "default": "t:sections.image-with-text.blocks.heading.settings.heading.default",
+          "label": "t:sections.image-with-text.blocks.heading.settings.heading.label"
         },
         {
           "type": "select",
-          "id": "heading_tag",
-          "label": "t:global.text.style",
+          "id": "heading_size",
           "options": [
             {
-              "value": "h1",
-              "label": "H1"
-            },
-            {
               "value": "h2",
-              "label": "H2"
+              "label": "t:sections.all.heading_size.options__1.label"
             },
             {
-              "value": "h3",
-              "label": "H3"
+              "value": "h1",
+              "label": "t:sections.all.heading_size.options__2.label"
             },
             {
-              "value": "h4",
-              "label": "H4"
+              "value": "h0",
+              "label": "t:sections.all.heading_size.options__3.label"
             },
             {
-              "value": "h5",
-              "label": "H5"
+              "value": "hxl",
+              "label": "t:sections.all.heading_size.options__4.label"
             },
             {
-              "value": "h6",
-              "label": "H6"
+              "value": "hxxl",
+              "label": "t:sections.all.heading_size.options__5.label"
             }
           ],
-          "default": "h1"
-        }
-      ]
-    },
-
-
-      {
-  "type": "directions_block_2",
-  "name": "Directions Block 2",
-  "settings": [
-    {
-      "type": "text",
-      "id": "title2",
-      "label": "Title",
-      "default": "Directions"
-    },
-    {
-      "type": "richtext",
-      "id": "description2",
-      "label": "Description",
-      "default": "<p>Give them a delicious chew every morning with food or any time as a stand-alone treat. Positive improvements should begin to appear within 4 - 6 weeks.</p>"
-    },
-    {
-      "type": "text",
-      "id": "weight_label2",
-      "label": "Weight Label",
-      "default": "Dog weight"
-    },
-    {
-      "type": "text",
-      "id": "serving_label2",
-      "label": "Serving Label",
-      "default": "Serving / day"
-    },
-    {
-      "type": "text",
-      "id": "item_1_label2",
-      "label": "Item 1 Weight",
-      "default": "Less than 25lbs"
-    },
-    {
-      "type": "text",
-      "id": "item_1_serving2",
-      "label": "Item 1 Serving",
-      "default": "1 Chew"
-    },
-    {
-      "type": "text",
-      "id": "item_2_label2",
-      "label": "Item 2 Weight",
-      "default": "25lbs – 75lbs"
-    },
-    {
-      "type": "text",
-      "id": "item_2_serving2",
-      "label": "Item 2 Serving",
-      "default": "2 Chew"
-    },
-    {
-      "type": "text",
-      "id": "item_3_label2",
-      "label": "Item 3 Weight",
-      "default": "75lbs or more"
-    },
-    {
-      "type": "text",
-      "id": "item_3_serving2",
-      "label": "Item 3 Serving",
-      "default": "3 Chew"
-    }
-  ]
-}
-,
-
-    {
-  "type": "directions_block",
-  "name": "Directions Block",
-  "settings": [
-    {
-      "type": "text",
-      "id": "title",
-      "label": "Title",
-      "default": "Directions"
-    },
-    {
-      "type": "richtext",
-      "id": "description",
-      "label": "Description",
-      "default": "<p>Give them a delicious chew every morning with food or any time as a stand-alone treat. Positive improvements should begin to appear within 4 - 6 weeks.</p>"
-    },
-    {
-      "type": "text",
-      "id": "weight_label",
-      "label": "Weight Label",
-      "default": "Dog weight"
-    },
-    {
-      "type": "text",
-      "id": "serving_label",
-      "label": "Serving Label",
-      "default": "Serving / day"
-    },
-    {
-      "type": "text",
-      "id": "item_1_label",
-      "label": "Item 1 Weight",
-      "default": "Less than 25lbs"
-    },
-    {
-      "type": "text",
-      "id": "item_1_serving",
-      "label": "Item 1 Serving",
-      "default": "1 Chew"
-    },
-    {
-      "type": "text",
-      "id": "item_2_label",
-      "label": "Item 2 Weight",
-      "default": "25lbs – 75lbs"
-    },
-    {
-      "type": "text",
-      "id": "item_2_serving",
-      "label": "Item 2 Serving",
-      "default": "2 Chew"
-    },
-    {
-      "type": "text",
-      "id": "item_3_label",
-      "label": "Item 3 Weight",
-      "default": "75lbs or more"
-    },
-    {
-      "type": "text",
-      "id": "item_3_serving",
-      "label": "Item 3 Serving",
-      "default": "3 Chew"
-    }
-  ]
-}
-,
-    {
-      "type": "richtext",
-      "name": "t:sections.image_with_text.blocks.paragraph.name",
-      "settings": [
-        {
-          "type": "richtext",
-          "id": "content",
-          "label": "t:global.text.content",
-          "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+          "default": "h1",
+          "label": "t:sections.all.heading_size.label"
         }
       ]
     },
     {
-      "type": "page",
-      "name": "t:sections.image_with_text.blocks.page.name",
-      "settings": [
-        {
-          "type": "page",
-          "id": "page",
-          "label": "Page"
-        }
-      ]
-    },
-    {
-      "type": "liquid",
-      "name": "t:sections.image_with_text.blocks.liquid.name",
-      "settings": [
-        {
-          "type": "liquid",
-          "id": "liquid",
-          "label": "t:global.code.liquid",
-          "default": "<p>Write custom Liquid code to include widget or dynamic code.</p>"
-        }
-      ]
-    },
-    {
-      "type": "link",
-      "name": "t:sections.image_with_text.blocks.link.name",
+      "type": "caption",
+      "name": "t:sections.image-with-text.blocks.caption.name",
+      "limit": 1,
       "settings": [
         {
           "type": "text",
-          "id": "text",
-          "label": "t:global.text.text",
-          "default": "Text"
+          "id": "caption",
+          "default": "t:sections.image-with-text.blocks.caption.settings.text.default",
+          "label": "t:sections.image-with-text.blocks.caption.settings.text.label"
         },
         {
-          "type": "url",
-          "id": "url",
-          "label": "t:global.text.link"
+          "type": "select",
+          "id": "text_style",
+          "options": [
+            {
+              "value": "subtitle",
+              "label": "t:sections.image-with-text.blocks.caption.settings.text_style.options__1.label"
+            },
+            {
+              "value": "caption-with-letter-spacing",
+              "label": "t:sections.image-with-text.blocks.caption.settings.text_style.options__2.label"
+            }
+          ],
+          "default": "caption-with-letter-spacing",
+          "label": "t:sections.image-with-text.blocks.caption.settings.text_style.label"
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "options": [
+            {
+              "value": "small",
+              "label": "t:sections.image-with-text.blocks.caption.settings.caption_size.options__1.label"
+            },
+            {
+              "value": "medium",
+              "label": "t:sections.image-with-text.blocks.caption.settings.caption_size.options__2.label"
+            },
+            {
+              "value": "large",
+              "label": "t:sections.image-with-text.blocks.caption.settings.caption_size.options__3.label"
+            }
+          ],
+          "default": "medium",
+          "label": "t:sections.image-with-text.blocks.caption.settings.caption_size.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "t:sections.image-with-text.blocks.text.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "t:sections.image-with-text.blocks.text.settings.text.default",
+          "label": "t:sections.image-with-text.blocks.text.settings.text.label"
+        },
+        {
+          "type": "select",
+          "id": "text_style",
+          "options": [
+            {
+              "value": "body",
+              "label": "t:sections.image-with-text.blocks.text.settings.text_style.options__1.label"
+            },
+            {
+              "value": "subtitle",
+              "label": "t:sections.image-with-text.blocks.text.settings.text_style.options__2.label"
+            }
+          ],
+          "default": "body",
+          "label": "t:sections.image-with-text.blocks.text.settings.text_style.label"
         }
       ]
     },
     {
       "type": "button",
-      "name": "t:sections.image_with_text.blocks.button.name",
+      "name": "t:sections.image-with-text.blocks.button.name",
+      "limit": 1,
       "settings": [
         {
-          "type": "select",
-          "id": "style",
-          "label": "t:global.text.style",
-          "options": [
-            {
-              "value": "outline",
-              "label": "t:global.text.button_style_options.outline"
-            },
-            {
-              "value": "solid",
-              "label": "t:global.text.button_style_options.solid"
-            }
-          ],
-          "default": "solid"
-        },
-        {
           "type": "text",
-          "id": "text",
-          "label": "t:global.text.text",
-          "default": "Button text"
+          "id": "button_label",
+          "default": "t:sections.image-with-text.blocks.button.settings.button_label.default",
+          "label": "t:sections.image-with-text.blocks.button.settings.button_label.label",
+          "info": "t:sections.image-with-text.blocks.button.settings.button_label.info"
         },
         {
           "type": "url",
-          "id": "url",
-          "label": "t:global.text.link"
+          "id": "button_link",
+          "label": "t:sections.image-with-text.blocks.button.settings.button_link.label"
         },
         {
-          "type": "color",
-          "id": "background",
-          "label": "t:global.colors.background"
-        },
-        {
-          "type": "color",
-          "id": "text_color",
-          "label": "t:global.text.text"
+          "type": "checkbox",
+          "id": "button_style_secondary",
+          "default": false,
+          "label": "t:sections.image-with-text.blocks.button.settings.outline_button.label"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "t:sections.image_with_text.presets.image_with_text.name",
+      "name": "t:sections.image-with-text.presets.name",
       "blocks": [
         {
-          "type": "subheading",
-          "settings": {
-            "text": "Subheading"
-          }
+          "type": "heading"
         },
         {
-          "type": "heading",
-          "settings": {
-            "text": "Image with text"
-          }
+          "type": "text"
         },
         {
-          "type": "richtext"
+          "type": "button"
         }
       ]
     }
