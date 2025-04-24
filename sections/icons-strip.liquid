@@ -1,0 +1,61 @@
+<section class="icons-strip">
+  <div class="content-wrapper" id="icons-strip-content" dir="ltr">
+    {% for block in section.blocks %}
+      <div class="icon-wrapper">
+        <img src="{{ block.settings.icon | img_url: '300x300' }}">
+        <p>{{ block.settings.text }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Icons Strip",
+    "blocks": [
+      {
+        "type": "select",
+        "name": "Icon",
+        "settings": [
+          {
+            "id": "icon",
+            "type": "image_picker",
+            "label": "Icon"
+          },
+          {
+            "id": "text",
+            "type": "text",
+            "label": "Title"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "category": "Custom Content",
+        "name": "Icons Strip"
+      }
+    ]
+  }
+{% endschema %}	
+
+
+
+
+<style>
+
+  .icons-strip {
+    position: relative;
+    background: #ebf5fb;
+    padding: 77px 0;
+}
+  @media screen and (min-width: 0px) and (max-width: 1023px) {
+    .icons-strip {
+        height: 80px;
+        padding: 22px 0;
+        direction: ltr;
+    }
+}
+
+
+</style>

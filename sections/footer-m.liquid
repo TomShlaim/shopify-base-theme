@@ -1,0 +1,147 @@
+<footer id="footer">
+    <div class="content-wrapper"> 
+        <div class="top-row">
+            <a class="logo" href="/">
+                {{ 'logo-bright.svg' | asset_url | img_tag }}
+            </a>
+            <a class="instagram-link" href="{{ settings.facebook_link }}" target="_blank">
+                Follow us on Facebook
+            </a>
+        </div>
+        <div class="slider" id="footer-slider">
+            {% for block in section.blocks %}
+                <div class="image-wrapper">
+                    <div class="inner">
+                        <div class="image bg lazy" data-src="{{ block.settings.image | img_url: '2000x2000' }}"></div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="bottom-row">
+            <div class="newsletter-wrapper">
+                <h2>
+                    {{ section.settings.newsletter_headline }}
+                </h2>
+                {% form 'customer' %}
+                    {{ form.errors | default_errors }}
+                    <input required type="email" name="contact[email]" placeholder="Email address">
+                    <button>
+                        {{ 'long-arrow-left.svg' | asset_url | img_tag }}
+                    </button>
+                    {% if form.posted_successfully? %}
+                        <div class="thanks">
+                            <p>
+                               Thanks for signing up! 
+                            </p>
+                        </div>
+                    {% endif %}
+                {% endform %}
+            </div>
+            <div class="menus">
+                <div class="col">
+                    <p class="title">
+                        Navigation
+                    </p>
+                    <ul>
+                        {% for link in linklists.navigation.links %}
+                            <li class="{% if link.active %}active{% endif %}">
+                                <a href="{{ link.url }}">
+                                    {{ link.title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col">
+                    <p class="title">
+                        Support
+                    </p>
+                    <ul>
+                        {% for link in linklists.footer.links %}
+                            <li class="{% if link.active %}active{% endif %}">
+                                <a href="{{ link.url }}">
+                                    {{ link.title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+              <div class="col">
+                    <p class="title">
+                        Info
+                    </p>
+                    <ul>
+                        {% for link in linklists.footer-info-menu.links %}
+                            <li class="{% if link.active %}active{% endif %}">
+                                <a href="{{ link.url }}">
+                                    {{ link.title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="legal-socials">
+            <ul class="legal">
+                {% for link in linklists.legal-menu.links %}
+                    <li class="{% if link.active %}active{% endif %}">
+                        <a href="{{ link.url }}">
+                            {{ link.title }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+             <div class="socials">
+                <div class="space"></div>
+                <a href="{{ settings.facebook_link }}" target="_blank">     
+                    {{ 'instagram-white.svg' | asset_url | img_tag }}
+                </a>
+                <a href="{{ settings.facebook_link }}" target="_blank"> 
+                    {{ 'facebook-white.svg' | asset_url | img_tag }}
+                </a>
+            </div>
+        </div>
+        <div class="legal-socials second">
+            <ul class="legal">
+                <li>
+                    <a href="https://shopify.com/" target="_blank">
+                        Powered by Shopify
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+{% schema %}  
+    {
+        "name": "Footer",
+        "blocks": [
+            {
+                "type": "select",
+                "name": "Image",
+                "settings": [
+                    {
+                        "id": "image",
+                        "type": "image_picker",
+                        "label": "Image"
+                    }
+                ]
+            }
+        ],
+        "settings": [
+            {
+                "type": "text",
+                "id": "newsletter_headline",
+                "label": "Newsletter form headline"
+            }
+        ]
+    }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

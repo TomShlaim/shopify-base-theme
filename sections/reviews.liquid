@@ -1,0 +1,550 @@
+{% schema %}
+{
+  "name": "reviews",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#D7E2E8"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide-avatar",
+      "label": "Hide Avatar",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Join Community of thousands and start today!"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    },
+        {
+          "type": "select",
+          "id": "heading_alignment",
+          "options": [
+             {
+              "value": "center",
+              "label": "Center"
+            },          
+            {
+              "value": "left",
+              "label": "Left"
+            },   
+          ],
+          "default": "center",
+          "label": "Heading alignment"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+             {
+              "value": "h3",
+              "label": "Small"
+            },          
+            {
+              "value": "h2",
+              "label": "Medium"
+            },
+            {
+              "value": "h1",
+              "label": "Large"
+            },    
+          ],
+          "default": "h1",
+          "label": "Heading Size"
+        },    
+    {
+      "type": "checkbox",
+      "id": "enable_dark_mode",
+      "label": "Enable Dark Mode",
+      "default": false
+    },
+  {
+          "type": "select",
+          "id": "image_ratio",
+          "label": "Image Ratio",
+          "options": [
+            {
+              "value": "ratio-square",
+              "label": "Square (16:16)"
+            },
+            {
+              "value": "ratio-landscape",
+              "label": "Landscape (16:10)"
+            },
+            {
+              "value": "ratio-portrait",
+              "label": "Portrait (10:16)"
+            }
+          ],
+          "default": "ratio-square"
+        }   
+  ],
+  "blocks": [
+    {
+      "type": "testimonial_card",
+      "name": "Testimonial Card",
+      "settings": [
+               {
+          "type": "image_picker",
+          "id": "testimonial_image",
+          "label": "Image or Video Poster",
+          "info": "Required - Will be used as main image or video poster"
+        },
+        {
+          "type": "select",
+          "id": "media_type",
+          "label": "Media Type",
+          "options": [
+            {
+              "value": "image",
+              "label": "Image Only"
+            },
+            {
+              "value": "video",
+              "label": "Video"
+            }
+          ],
+          "default": "image",
+          "info": "Select 'Video' to enable video playback using the image as poster"
+        },
+        {
+          "type": "url",
+          "id": "video_url",
+          "label": "Video URL",
+          "info": "Add MP4 video URL if video type is selected"
+        },  
+        {
+          "type": "image_picker",
+          "id": "avatar_image",
+          "label": "Avatar Image"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Sophie Reynolds"
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Date",
+          "default": "2 Days ago"
+        },
+        {
+          "type": "textarea",
+          "id": "testimonial_text",
+          "label": "Testimonial Text",
+          "default": "Winter wreaked havoc on my skin, but now I make my own body butter to stay soft and hydrated all season. No more dryness!"
+        },
+        {
+          "type": "select",
+          "id": "stars_type",
+          "label": "Stars Type",
+          "options": [
+            {
+              "value": "yellowStars",
+              "label": "Four Stars"
+            },
+            {
+              "value": "fourStars",
+              "label": "Five Stars"
+            }
+          ],
+          "default": "yellowStars"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "reviews",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+ 
+<section
+  class="
+    testimonialsCarousel testimonialsBody {% if section.settings.enable_dark_mode %}dark-mode{% endif %}
+  "
+  style="background-color: {{ section.settings.background_color }};"
+>
+  <!-- Rest of the section code remains the same until the testimonial image part -->
+  <div class="container">
+    <div class=" {{ section.settings.heading_alignment }}">
+      <div class="{{ section.settings.heading_size }}" style="margin-bottom: 8px; color: {{ section.settings.text_color }};">
+        {{ section.settings.title }}
+      </div>
+    </div>
+  </div>
+
+  <div class="scrolly scroll-trigger animate--slide-in">
+    <div class="carouselWrapper">
+      <ul class="carouselPre">
+        {% for block in section.blocks %}
+          <li class="itemsC">
+          {% if block.settings.testimonial_image %}
+          <div class="testimonialsImg {{ section.settings.image_ratio }}">
+              {% if block.settings.media_type == 'video' and block.settings.video_url != blank %}
+                  <video 
+                      poster="{{ block.settings.testimonial_image | img_url: 'original' }}"
+                      playsinline
+                    loop
+                    muted
+                    autoplay
+                  >
+                      <source src="{{ block.settings.video_url }}" type="video/mp4">
+                      Your browser does not support the video tag.
+                  </video>
+              {% else %}
+                  <img src="{{ block.settings.testimonial_image | img_url: 'original' }}" alt="Testimonial Image">
+              {% endif %}
+          </div>
+          {% endif %}
+            <div>
+            <div class="avatarWrapper">
+              <div style="position: relative;" class="{% if section.settings.hide-avatar %}hide-avatar{% endif %}">
+                <div class="avatar">
+                  {% if block.settings.avatar_image %}
+                    <img src="{{ block.settings.avatar_image | img_url: 'original' }}" alt="Avatar Image">
+                  {% endif %}
+                </div>
+                <img
+                  class="faceBadge"
+                  src="https://cdn.shopify.com/s/files/1/0896/3080/2207/files/Social_Icons.svg?v=1732795346"
+                  >
+              </div>
+              <div>
+                <p class="small bold">{{ block.settings.name }}</p>
+                <p class="small">{{ block.settings.date }}</p>
+              </div>
+            </div>
+
+            <!-- Stars Image Based on Stars Type -->
+            {% if block.settings.stars_type == 'yellowStars' %}
+              <img
+                class="yellowStars"
+                src="https://cdn.shopify.com/s/files/1/0896/3080/2207/files/Frame_3468416.svg?v=1732794399"
+                alt="Yellow Stars"
+              >
+            {% elsif block.settings.stars_type == 'fourStars' %}
+              <img
+                class="fourStars"
+                src="https://cdn.shopify.com/s/files/1/0896/3080/2207/files/Frame_3468416_1.svg?v=1732796026"
+                alt="Four Stars"
+              >
+            {% endif %}
+
+            <p class="quote">{{ block.settings.testimonial_text }}</p>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+<script src="{{ 'scrolly.js' | asset_url }}" defer="defer"></script>
+
+
+<style>
+.testimonialsCarousel.testimonialsBody {
+    padding-top: 60px;
+    padding-bottom: 30px;
+    background-color: #D7E2E8;
+}
+  
+
+
+
+  .testimonialsCarousel.testimonialsBody .testimonialFooter {
+    padding-bottom: 0;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .testimonialsImg {
+    overflow: hidden;
+    border-radius: 4px;
+  }
+
+  .testimonialsImg.ratio-square {
+    aspect-ratio: 16 / 16;
+  }
+
+  .testimonialsImg.ratio-landscape {
+    aspect-ratio: 16 / 10;
+  }
+
+  .testimonialsImg.ratio-portrait {
+    aspect-ratio: 11 / 16;
+  }
+
+.testimonialsImg img,
+.testimonialsImg video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+  
+  .testimonialsCarousel .carouselPre li{
+    justify-content: flex-start;
+  }
+
+  /* Rest of the styles remain the same */
+  .faceBadge {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .testimonialsCarousel .yellowStars,
+  .testimonialsCarousel .fourStars {
+    height: auto;
+    width: 70px;
+    margin-bottom: 4px;
+  }
+
+  .testimonialsCarousel.testimonialsBody .carouselPre {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    gap: 8px;
+  }
+
+  .avatarWrapper p.small {
+    font-size: 12px;
+    margin: 0;
+  }
+
+  .avatarWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .avatarWrapper p.small.bold {
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  
+
+  .testimonialsCarousel.testimonialsBody .carouselPre li {
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 1px 4px 10px #0000001c;
+    padding: 16px;
+    padding-bottom: 24px;
+  }
+
+  .testimonialsCarousel.testimonialsBody .trust p.small {
+    font-size: 12px;
+  }
+
+  /* Dark Mode Styles */
+  .testimonialsCarousel.testimonialsBody.dark-mode {
+    background-color: #1a1a1a;
+  }
+
+  .testimonialsCarousel.testimonialsBody.dark-mode h2 {
+    color: #ffffff !important;
+  }
+
+  .testimonialsCarousel.testimonialsBody.dark-mode .carouselPre li {
+    background-color: #232222;
+    box-shadow: 1px 4px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .testimonialsCarousel.testimonialsBody.dark-mode p {
+    color: #e0e0e0;
+  }
+
+  .testimonialsCarousel.testimonialsBody.dark-mode .small {
+    color: #cccccc;
+  }
+
+  .testimonialsCarousel.testimonialsBody.dark-mode .avatar {
+    border-color: #404040;
+  }
+
+  .testimonialsCarousel.testimonialsBody  .carouselPre{
+
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+    display: grid;
+    grid-template-rows: repeat(1, auto);
+    grid-auto-columns: calc((100% - 10 * var(--grid-column-gap)) / 4);
+    grid-auto-flow: column;
+    grid-column-gap: var(--grid-column-gap);
+    grid-row-gap: 0px;
+    row-gap: 0px;
+    width: -moz-fit-content;
+    width: fit-content;
+    margin: 0;
+    list-style: none;
+    padding-left: calc((100% - 1420px) / 2);
+    padding-right: calc((100% - 1420px) / 2);
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+    grid-auto-columns: calc((100% - 0* var(--grid-column-gap)) / 4) ;
+    
+}
+
+  .avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+}
+
+
+  :root {
+    --grid-column-gap: 16px;
+    --grid-column-gap-small: 8px;
+  
+}
+
+  .scrolly {
+    position: relative;
+    overflow: hidden;
+}
+
+
+  .hide-avatar{
+    display: none;
+  }
+
+.testimonialsCarousel .carouselPre li {
+    border-radius: var(--medium);
+    padding: 20px;
+    display: flex;
+    aspect-ratio: auto;
+    overflow: hidden;
+    flex-direction: column;
+    min-height: 270px;
+}
+
+.carouselPre li {
+    scroll-snap-align: start;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 12 / 16;
+    background-color: #0000001f;
+    list-style: none;
+    border-radius: var(--large);
+    overflow: hidden;
+}
+.itemsC {
+    position: relative;
+}
+
+.testimonialsCarousel.testimonialsBody .carouselPre {
+    grid-auto-columns: calc((100% - 0 * var(--grid-column-gap)) / 4);
+}
+
+.testimonialsCarousel.testimonialsBody .carouselPre {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    gap: 8px;
+}
+
+
+  
+.testimonialsCarousel p.quote{
+   font-size: 14px;
+  line-height: 1.6em;
+  margin: 0;
+ }
+
+/* Center the carousel on desktop only 
+@media only screen and (min-width: 891px) {
+  .testimonialsCarousel .carouselPre {
+    justify-content: center !important;
+  }
+  
+  .testimonialsCarousel .scrolly {
+    display: flex;
+    justify-content: center;
+  }
+}*/
+
+/* Ensure mobile scrolling works properly */
+@media only screen and (max-width: 890px) {
+  .testimonialsCarousel .carouselPre {
+    justify-content: flex-start !important; /* Reset to default for mobile */
+    padding-left: 16px; /* Add some padding on the left for mobile */
+  }
+  
+  .testimonialsCarousel .scrolly {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 10px; /* Space for scrollbar */
+  }
+  
+  /* Ensure the scroll container doesn't get affected by centering */
+  .testimonialsCarousel .carouselWrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+  @media only screen and (max-width: 890px) {
+
+    .testimonialsCarousel.testimonialsBody .carouselPre{
+          justify-content: flex-start !important;
+        padding-left: 16px;
+    
+    }
+}
+
+  @media only screen and (max-width: 890px) {
+    .testimonialsCarousel.testimonialsBody {
+      padding-top: 20px;
+    }
+
+     .testimonialsCarousel p.quote{
+   font-size: 13px;
+ }
+
+    .testimonialsCarousel.testimonialsBody.dark-mode .carouselPre li{
+      padding: 12px;
+    }
+
+.avatarWrapper{
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+    .avatarWrapper  p.small{
+      font-size: 11px;
+    }
+
+        .avatarWrapper  p.small.bold{
+      font-size: 12px;
+    }
+    .testimonialsCarousel.testimonialsBody .trust {
+      scale: 0.85;
+    }
+
+    .testimonialsCarousel.testimonialsBody .carouselPre {
+      grid-auto-columns: calc((100% - -14* var(--grid-column-gap)) / 2);
+    }
+  }
+</style>

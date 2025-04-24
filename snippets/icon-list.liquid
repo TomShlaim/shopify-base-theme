@@ -1,0 +1,183 @@
+<style>
+    .icon-list-common {
+      width: 100%;
+    }
+
+    .icon-list-common .col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .icon-list-common h3 {
+        margin-bottom: 24px;
+        font-size: 28px;
+        color: {{ block.settings.titleColor }}
+    }
+
+    .icon-list-common .subtitle h4, .icon-list-common .subtitle h3{
+        color: {{ block.settings.subtitleColor }};
+        margin-bottom: 16px;
+    }
+
+    .icon-list-common .subtitle p {
+        font-weight: 400;
+        margin: 0 auto 24px auto;
+        max-width: 100%;
+        line-height: 1.4;
+        letter-spacing: -0.02rem;
+        color: {{ block.settings.subtitleColor }};
+        font-size: 16px;
+    }
+
+    .icon-list-common p {
+        font-weight: 600;
+        opacity: 1;
+        margin-bottom: 0;
+        max-width: 300px;
+    }
+
+    .icon-list-common .icons-list-item p {
+        font-weight: 600;
+        line-height: 1.3;
+        opacity: 1;
+        color: {{ block.settings.textColor }};
+    }
+
+    .icon-list-common .icons-list-item i, .icon-list-common .icons-list-item path{
+        color: {{ block.settings.textColor }};
+      fill: {{ block.settings.textColor }};
+    }
+
+    .icon-list-common .svgWrapper{
+        padding: 0 8px 0 0;
+        width: 30px;
+        height: 18px;
+        display: flex;
+    }
+
+    .icon-list-common .svgWrapper svg{
+        width: 100%;
+        height: 100%;
+    }
+
+    .icon-list-common .svgWrapper svg path{
+        width: 100%;
+        height: 100%;
+    }
+
+    .icon-list-common .card {
+        border-radius: 8px;
+        padding: 16px;
+      max-width: 450px;
+        border: none;
+        background-color:{{ block.settings.cardColor }};
+    }
+
+  .icon-list-common .card  .row3{
+        column-gap: 8px; 
+  }
+
+    .icon-list-common .col {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0px;
+        padding: 4px 0;
+    }
+
+
+          .icon-list-common .icons-list-item p{
+            font-size : 13px;
+            margin: 0;
+            text-align: left;
+        }
+
+    @media only screen and (max-width: 890px) {
+        /* Media query styles remain the same, just replace section.settings with block.settings */
+        .icon-list-common .subtitle p {
+            text-align: center;
+        }
+
+        .icon-list-common {
+            padding: 0;
+          margin: 0;
+        }
+        .icon-list-common .row.row3{
+            grid-template-columns: 1fr;
+        }
+        .icon-list-common .card {
+            border-radius: 8px;
+            padding: 12px 10px;
+            border: none;
+        }
+        .svgWrapper i{
+            font-size: 18px;
+        }
+        .icon-list-common .title p.subtitle {
+            font-size: 14px;
+        }
+        .icon-list-common .row3 {
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-gap: 4px;
+        }
+        .icon-list-common .col {
+            margin-bottom: 0;
+        }
+        .icon-list-common h3 {
+            font-size: 30px !important;
+        }
+        .icon-list-common .icons-list-item {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 0px;
+        }
+    }
+</style>
+
+
+<section class="icon-list-common">
+            {% if block.settings.list_subtitle %}
+            <div class="subtitle">
+                {{ block.settings.list_subtitle }}
+            </div>
+            {% endif %}
+
+        <div class="{% if block.settings.card %}card{% endif %}">
+            <div class="">
+                <div class="col center icons-list-item">
+                    <div class="svgWrapper">
+                        <i class="fa-regular fa-circle-check"></i>                     
+                    </div>
+                    <p class="large bold icons-list-item-text">50% OFF Your First Order</p>
+                </div>
+                <div class="col center icons-list-item">
+                    <div class="svgWrapper"><i class="fa-solid fa-rotate"></i></div>
+                    <p class="large bold icons-list-item-text">Monthly Subscription (cancel anytime)</p>
+                </div>  
+                <div class="col center icons-list-item">
+                    <div class="svgWrapper">
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 216.02 213.46">
+  <!-- Generator: Adobe Illustrator 29.4.0, SVG Export Plug-In . SVG Version: 2.1.0 Build 152)  -->
+  <defs>
+  </defs>
+  <g id="pMyZHn.tif">
+    <image id="Layer_0" width="2" height="4" transform="translate(63.88 181.96) scale(.5)" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAFCAYAAABvsz2cAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAGElEQVQImWP4////fwYGBgYmBijAZMABAKolBAM0eHiLAAAAAElFTkSuQmCC"/>
+  </g>
+  <g id="w39Jhy.tif">
+    <path class="st0" d="M199.59,148.8v-40.67c-.44-2.23-1.24-4.63-2.39-6.58-3.38-5.73-25.58-27.32-31.54-32.34-2.57-2.17-7.32-5.23-10.74-5.23h-15.22v-12.22c0-8.9-11.09-17.71-19.72-17.71-29.38,1.65-61.24-2.23-90.34,0-12.07.93-18.94,9.42-19.74,21.18-1.94,28.32,1.51,58.81,0,87.36.77,12.24,7.64,19.76,19.88,21.3.81,8.94,3.81,16.99,10.86,22.82,19.65,16.26,49.08,2.27,49.15-22.94l39.63-.03c.84.23.79,4.93,1.03,6.05,1.86,8.62,7.23,16.25,15.15,20.29,20.6,10.5,43.58-3.54,44.03-26.3,5.9-.71,16.41,2.49,19.22-4.49,2.74-6.8-2.74-10.98-9.23-10.47ZM61.07,178.73c-19.22,1.49-22.08-27.69-2.85-29.79,20.09-2.2,22.65,28.26,2.85,29.79ZM124.5,145.83c-1,2.28-2.69,2.77-5,2.99-10.53.98-22.67-.69-33.37-.11-2.37-2.62-4.33-5.61-7.07-7.9-11.5-9.64-29.33-9.26-39.96,1.49-1.01,1.03-4.6,6.26-5.06,6.42-3.96,1.34-9.62-.68-9.17-5.64V54.72c.28-3.15,1.04-5.04,4.38-5.6l92.5.1c1.22.55,2.2,1.53,2.75,2.74v93.86ZM160.39,178.74c-18.93.81-21.44-27.68-2.33-29.8,20.38-2.26,22.67,28.94,2.33,29.8ZM139.7,108.88v-29.94h14.73l29.7,29.94h-44.43Z"/>
+  </g>
+</svg></div>
+                    <p class="large bold icons-list-item-text">Free Delivery To Your Door</p>
+                </div>  
+              <div class="col center icons-list-item">
+                    <div class="svgWrapper">
+                        <i class="fa-regular fa-face-smile-beam"></i>                            
+                    </div>
+                    <p class="large bold icons-list-item-text">30-day money-back guarantee</p>
+                </div>  
+            </div>
+        </div>
+</section>

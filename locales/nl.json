@@ -171,8 +171,8 @@
         "title": "Volumeprijsstelling",
         "note": "Volumeprijsstelling beschikbaar",
         "minimum": "Meer dan {{ quantity }}",
-        "price_range": "{{ minimum }} - {{ maximum }}",
-        "price_at_each_html": "{{ price }}/st."
+        "price_at_each": "{{ price }}/st.",
+        "price_range": "{{ minimum }} - {{ maximum }}"
       },
       "product_variants": "Productvarianten",
       "taxes_included": "Belastingen inbegrepen.",
