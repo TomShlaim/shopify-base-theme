@@ -175,7 +175,7 @@
       "type": "checkbox",
       "id": "auto_rotate",
       "label": "t:sections.announcement-bar.settings.auto_rotate.label",
-      "default": false
+      "default": true
     },
     {
       "type": "range",
@@ -210,7 +210,7 @@
     {
       "type": "checkbox",
       "id": "show_social",
-      "default": false,
+      "default": true,
       "label": "t:sections.announcement-bar.settings.show_social.label",
       "info": "t:sections.announcement-bar.settings.show_social.info"
     },
@@ -237,7 +237,41 @@
         {
           "type": "text",
           "id": "text",
-          "default": "t:sections.announcement-bar.blocks.announcement.settings.text.default",
+          "default": "Free shipping on orders over $50! 🐾",
+          "label": "t:sections.announcement-bar.blocks.announcement.settings.text.label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.announcement-bar.blocks.announcement.settings.link.label"
+        }
+      ]
+    },
+    {
+      "type": "announcement",
+      "name": "t:sections.announcement-bar.blocks.announcement.name", 
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "default": "New pet supplies just arrived! Shop now 🦮",
+          "label": "t:sections.announcement-bar.blocks.announcement.settings.text.label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.announcement-bar.blocks.announcement.settings.link.label"
+        }
+      ]
+    },
+    {
+      "type": "announcement",
+      "name": "t:sections.announcement-bar.blocks.announcement.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "default": "Join our loyalty program - earn treats for your pets! 🐱",
           "label": "t:sections.announcement-bar.blocks.announcement.settings.text.label"
         },
         {
@@ -248,15 +282,18 @@
       ]
     }
   ],
-  "presets": [
-    {
-      "name": "t:sections.announcement-bar.presets.name",
-      "blocks": [
-        {
-          "type": "announcement"
-        }
-      ]
-    }
-  ]
+  "default": {
+    "blocks": [
+      {
+        "type": "announcement"
+      },
+      {
+        "type": "announcement"
+      },
+      {
+        "type": "announcement" 
+      }
+    ]
+  }
 }
 {% endschema %}
